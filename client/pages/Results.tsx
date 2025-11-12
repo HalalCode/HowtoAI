@@ -217,6 +217,7 @@ export default function Results() {
 
     try {
       setIsFollowUpLoading(true);
+      const savedTutorial = getTutorialByQuery(query);
       const response = await fetch("/api/follow-up", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
@@ -224,6 +225,9 @@ export default function Results() {
           originalQuery: query,
           followUpQuery: followUpQuery,
           language: language,
+          summary: data.summary,
+          isSaved: isSaved,
+          savedTutorialId: savedTutorial?.id,
         }),
       });
 
