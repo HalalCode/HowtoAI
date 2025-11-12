@@ -102,16 +102,16 @@ export default function Saved() {
           <div className="text-center py-12">
             <div className="text-4xl mb-4">📚</div>
             <p className="text-foreground/70 text-lg">
-              No saved tutorials yet
+              {t("saved.noSaved")}
             </p>
             <p className="text-foreground/50 text-sm mt-2">
-              Save your favorite guides to access them later
+              {t("saved.noSavedDesc")}
             </p>
             <button
               onClick={() => navigate("/")}
               className="mt-6 px-6 py-2 bg-primary text-primary-foreground rounded-lg font-medium hover:bg-primary/90 transition"
             >
-              Start Exploring
+              {t("saved.startExploring")}
             </button>
           </div>
         )}
