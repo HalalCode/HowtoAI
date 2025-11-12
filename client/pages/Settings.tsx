@@ -135,7 +135,10 @@ export default function Settings() {
               <select
                 value={language}
                 onChange={(e) => handleLanguageChange(e.target.value)}
-                className="w-full bg-white/20 dark:bg-white/10 border border-white/20 dark:border-white/10 rounded-lg px-4 py-2 text-foreground outline-none focus:border-purple-500/50 transition-all duration-300"
+                className="w-full bg-white/20 dark:bg-slate-700/50 border border-white/20 dark:border-white/10 rounded-lg px-4 py-2 text-foreground dark:text-white outline-none focus:border-purple-500/50 transition-all duration-300 appearance-none cursor-pointer"
+                style={{
+                  colorScheme: darkMode ? 'dark' : 'light',
+                }}
               >
                 <option value="en">English</option>
                 <option value="es">Español</option>
