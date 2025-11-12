@@ -103,7 +103,7 @@ export default function Settings() {
           </div>
 
           {/* Language Section */}
-          <div className="bg-card border border-input rounded-lg p-6 space-y-4 relative">
+          <div className="bg-white/10 dark:bg-slate-800/50 backdrop-blur-md border border-white/20 dark:border-white/10 rounded-2xl p-6 space-y-4 relative shadow-lg hover:shadow-xl transition-all duration-300">
             <div>
               <h3 className="font-semibold text-foreground mb-2">{t("settings.language")}</h3>
               <p className="text-sm text-foreground/60 mb-4">
@@ -112,7 +112,7 @@ export default function Settings() {
               <select
                 value={language}
                 onChange={(e) => handleLanguageChange(e.target.value)}
-                className="w-full bg-background border border-input rounded-lg px-4 py-2 text-foreground outline-none focus:border-primary transition"
+                className="w-full bg-white/20 dark:bg-white/10 border border-white/20 dark:border-white/10 rounded-lg px-4 py-2 text-foreground outline-none focus:border-purple-500/50 transition-all duration-300"
               >
                 <option value="en">English</option>
                 <option value="es">Español</option>
@@ -124,7 +124,7 @@ export default function Settings() {
               </select>
             </div>
             {showLanguageSaved && (
-              <div className="absolute top-6 right-6 bg-secondary text-secondary-foreground px-3 py-1 rounded-lg text-sm font-medium flex items-center gap-2 animate-fadeIn">
+              <div className="absolute top-6 right-6 bg-gradient-to-r from-green-500 to-emerald-500 text-white px-3 py-1 rounded-lg text-sm font-bold flex items-center gap-2 animate-fadeIn shadow-lg">
                 <Check className="w-4 h-4" />
                 {t("settings.saved")}
               </div>
@@ -132,7 +132,7 @@ export default function Settings() {
           </div>
 
           {/* Content Filters Section */}
-          <div className="bg-card border border-input rounded-lg p-6 space-y-4">
+          <div className="bg-white/10 dark:bg-slate-800/50 backdrop-blur-md border border-white/20 dark:border-white/10 rounded-2xl p-6 space-y-4 shadow-lg hover:shadow-xl transition-all duration-300">
             <h3 className="font-semibold text-foreground">{t("settings.contentFilters")}</h3>
             <div className="space-y-3">
               <label className="flex items-center gap-3 cursor-pointer">
@@ -157,7 +157,7 @@ export default function Settings() {
           </div>
 
           {/* Feedback Section */}
-          <div className="bg-card border border-input rounded-lg p-6 space-y-4">
+          <div className="bg-white/10 dark:bg-slate-800/50 backdrop-blur-md border border-white/20 dark:border-white/10 rounded-2xl p-6 space-y-4 shadow-lg hover:shadow-xl transition-all duration-300">
             <div className="flex items-center justify-between">
               <div className="flex items-center gap-3">
                 <Mail className="w-5 h-5 text-primary" />
@@ -170,7 +170,7 @@ export default function Settings() {
                   </p>
                 </div>
               </div>
-              <button className="px-6 py-2 bg-primary text-primary-foreground rounded-lg font-medium hover:bg-primary/90 transition">
+              <button className="px-6 py-2 bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 text-white rounded-lg font-bold transition-all duration-300 shadow-lg hover:shadow-xl hover:shadow-purple-500/30">
                 {t("settings.send")}
               </button>
             </div>
