@@ -3,31 +3,44 @@ import { SearchResponse, Video, Article } from "@shared/api";
 
 async function searchYouTube(query: string): Promise<Video[]> {
   const apiKey = process.env.YOUTUBE_API_KEY;
-  if (!apiKey) throw new Error("YOUTUBE_API_KEY not configured");
+  if (!apiKey) {
+    console.warn("YOUTUBE_API_KEY not configured");
+    return [];
+  }
 
-  const url = new URL("https://www.googleapis.com/youtube/v3/search");
-  url.searchParams.append("part", "snippet");
-  url.searchParams.append("q", query);
-  url.searchParams.append("type", "video");
-  url.searchParams.append("maxResults", "5");
-  url.searchParams.append("key", apiKey);
+  try {
+    const url = new URL("https://www.googleapis.com/youtube/v3/search");
+    url.searchParams.append("part", "snippet");
+    url.searchParams.append("q", query);
+    url.searchParams.append("type", "video");
+    url.searchParams.append("maxResults", "5");
+    url.searchParams.append("key", apiKey);
 
-  const response = await fetch(url.toString());
-  const data: any = await response.json();
+    const response = await fetch(url.toString());
+    const data: any = await response.json();
 
-  if (!data.items) return [];
+    if (!response.ok) {
+      console.warn(`YouTube API error: ${response.status} ${response.statusText}`, data?.error?.message);
+      return [];
+    }
 
-  return data.items.map((item: any) => ({
-    id: item.id.videoId,
-    title: item.snippet.title,
-    channel: item.snippet.channelTitle,
-    duration: "N/A",
-    views: "N/A",
-    thumbnail:
-      item.snippet.thumbnails.default?.url ||
-      "https://via.placeholder.com/120x90",
-    url: `https://www.youtube.com/watch?v=${item.id.videoId}`,
-  }));
+    if (!data.items) return [];
+
+    return data.items.map((item: any) => ({
+      id: item.id.videoId,
+      title: item.snippet.title,
+      channel: item.snippet.channelTitle,
+      duration: "N/A",
+      views: "N/A",
+      thumbnail:
+        item.snippet.thumbnails.default?.url ||
+        "https://via.placeholder.com/120x90",
+      url: `https://www.youtube.com/watch?v=${item.id.videoId}`,
+    }));
+  } catch (error) {
+    console.error("YouTube search error:", error);
+    return [];
+  }
 }
 
 async function searchArticles(query: string): Promise<Article[]> {
