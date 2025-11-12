@@ -2,6 +2,8 @@ import "dotenv/config";
 import express from "express";
 import cors from "cors";
 import { handleDemo } from "./routes/demo";
+import { handleSearch } from "./routes/search";
+import { handleFollowUp } from "./routes/follow-up";
 
 export function createServer() {
   const app = express();
@@ -18,6 +20,10 @@ export function createServer() {
   });
 
   app.get("/api/demo", handleDemo);
+
+  // Search and AI endpoints
+  app.get("/api/search", handleSearch);
+  app.post("/api/follow-up", handleFollowUp);
 
   return app;
 }
