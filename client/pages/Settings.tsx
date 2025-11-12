@@ -32,8 +32,7 @@ export default function Settings() {
   };
 
   const handleLanguageChange = (newLanguage: string) => {
-    setLanguage(newLanguage);
-    localStorage.setItem("language", newLanguage);
+    setAppLanguage(newLanguage as Language);
     setShowLanguageSaved(true);
     setTimeout(() => setShowLanguageSaved(false), 2000);
   };
