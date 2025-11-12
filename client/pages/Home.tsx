@@ -198,10 +198,9 @@ export default function Home() {
             </h3>
             <div className="flex flex-wrap gap-3">
               {(translations[language]?.home?.trendingList || []).map((search, index) => (
-                <button
+                <div
                   key={index}
-                  onClick={() => handleTrendingClick(search)}
-                  className="group/trend relative overflow-hidden"
+                  className="group/trend relative overflow-hidden rounded-full"
                 >
                   <div className="absolute inset-0 bg-gradient-to-r from-blue-500/20 via-purple-500/20 to-pink-500/20 rounded-full opacity-0 group-hover/trend:opacity-100 blur-lg transition-opacity duration-300"></div>
                   <button
@@ -210,7 +209,7 @@ export default function Home() {
                   >
                     {search}
                   </button>
-                </button>
+                </div>
               ))}
             </div>
           </div>
