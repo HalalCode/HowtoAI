@@ -200,7 +200,7 @@ export default function Home() {
 
       {/* Floating Footer */}
       <div className="absolute bottom-6 left-0 right-0 text-center text-sm text-foreground/50">
-        <p>✨ Powered by AI and the best tutorials online</p>
+        <p>{t("home.poweredBy")}</p>
       </div>
     </div>
   );
