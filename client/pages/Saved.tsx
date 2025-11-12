@@ -1,4 +1,4 @@
-import { useNavigate } from "react-router-dom";
+import { useNavigate, Link } from "react-router-dom";
 import { ArrowLeft, Heart, Calendar, Trash2 } from "lucide-react";
 
 interface SavedItem {
@@ -40,20 +40,26 @@ export default function Saved() {
     <div className="min-h-screen bg-background">
       {/* Header */}
       <header className="sticky top-0 z-50 bg-card/95 backdrop-blur border-b border-input shadow-sm">
-        <div className="max-w-4xl mx-auto px-4 py-4 flex items-center gap-4">
-          <button
-            onClick={() => navigate("/")}
-            className="p-2 hover:bg-muted rounded-lg transition"
-            title="Back to home"
-          >
-            <ArrowLeft className="w-5 h-5 text-foreground" />
-          </button>
-          <div className="flex-1">
+        <div className="max-w-4xl mx-auto px-4 py-4 flex items-center justify-between">
+          <div className="flex items-center gap-4 flex-1">
+            <Link
+              to="/"
+              className="p-2 hover:bg-muted rounded-lg transition"
+              title="Back to home"
+            >
+              <ArrowLeft className="w-5 h-5 text-foreground" />
+            </Link>
             <h1 className="text-2xl font-bold text-foreground">
               <Heart className="w-6 h-6 inline mr-2 text-secondary" />
               My Tutorials
             </h1>
           </div>
+          <Link
+            to="/settings"
+            className="text-sm font-medium text-foreground/70 hover:text-foreground transition"
+          >
+            Settings
+          </Link>
         </div>
       </header>
 
