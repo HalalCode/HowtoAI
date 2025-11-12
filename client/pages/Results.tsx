@@ -323,7 +323,7 @@ export default function Results() {
                       href={article.url}
                       target="_blank"
                       rel="noopener noreferrer"
-                      className="bg-card border border-input hover:border-primary hover:shadow-md rounded-lg p-4 transition-all duration-200 cursor-pointer group"
+                      className="bg-white/10 dark:bg-slate-800/50 backdrop-blur-md border border-white/20 dark:border-white/10 hover:border-purple-500/50 hover:bg-white/20 dark:hover:bg-slate-700/70 rounded-xl p-4 transition-all duration-300 cursor-pointer group shadow-lg hover:shadow-2xl hover:shadow-purple-500/20"
                     >
                       <div className="flex gap-3 items-start">
                         <div className="text-2xl flex-shrink-0 mt-1">📄</div>
