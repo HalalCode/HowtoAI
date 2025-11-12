@@ -230,13 +230,13 @@ export default function Results() {
             </div>
 
             {/* Tabs */}
-            <div className="border-b border-input">
+            <div className="border-b border-white/20 dark:border-white/10">
               <div className="flex gap-8">
                 <button
                   onClick={() => setActiveTab("videos")}
-                  className={`py-3 px-2 font-semibold text-sm border-b-2 transition-colors ${
+                  className={`py-3 px-2 font-bold text-sm border-b-2 transition-all duration-300 ${
                     activeTab === "videos"
-                      ? "border-primary text-primary"
+                      ? "border-purple-500 text-transparent bg-clip-text bg-gradient-to-r from-blue-600 to-purple-600 dark:from-blue-400 dark:to-purple-400"
                       : "border-transparent text-foreground/60 hover:text-foreground"
                   }`}
                 >
@@ -247,9 +247,9 @@ export default function Results() {
                 </button>
                 <button
                   onClick={() => setActiveTab("articles")}
-                  className={`py-3 px-2 font-semibold text-sm border-b-2 transition-colors ${
+                  className={`py-3 px-2 font-bold text-sm border-b-2 transition-all duration-300 ${
                     activeTab === "articles"
-                      ? "border-primary text-primary"
+                      ? "border-purple-500 text-transparent bg-clip-text bg-gradient-to-r from-blue-600 to-purple-600 dark:from-blue-400 dark:to-purple-400"
                       : "border-transparent text-foreground/60 hover:text-foreground"
                   }`}
                 >
