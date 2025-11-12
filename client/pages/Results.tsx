@@ -198,6 +198,8 @@ export default function Results() {
     }
 
     setIsSaved(!isSaved);
+    setSaveIndicator(true);
+    setTimeout(() => setSaveIndicator(false), 2000);
   };
 
   const handleShare = () => {
