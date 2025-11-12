@@ -116,6 +116,27 @@ export const handleSearch: RequestHandler = async (req, res) => {
       return res.status(400).json({ error: "Missing search query" });
     }
 
+    // Validate query is meaningful
+    const trimmed = q.trim();
+    if (trimmed.length < 3) {
+      return res
+        .status(400)
+        .json({ error: "Search query must be at least 3 characters" });
+    }
+
+    const words = trimmed.split(/\s+/).filter((w) => w.length > 1);
+    if (words.length < 2) {
+      return res.status(400).json({
+        error: "Please enter a meaningful question with at least 2 words",
+      });
+    }
+
+    if (/^[a-zA-Z0-9]{1,2}$/.test(trimmed)) {
+      return res
+        .status(400)
+        .json({ error: "Please enter a valid 'How to...' question" });
+    }
+
     const videos = await searchYouTube(q);
     const articles = await searchArticles(q);
     const summary = await generateSummary(q, videos, articles);
