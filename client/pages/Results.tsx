@@ -243,23 +243,85 @@ export default function Results() {
           </div>
         ) : data ? (
           <div className="space-y-8 animate-fadeIn">
-            {/* AI Summary Card */}
+            {/* AI Summary Card with Step Navigation */}
             <div className="relative group">
-              <div className="absolute -inset-0.5 bg-gradient-to-r from-blue-500 via-purple-500 to-pink-500 rounded-2xl opacity-0 group-hover:opacity-20 blur-xl transition-all duration-300 group-hover:blur-2xl"></div>
-              <div className="relative bg-white/10 dark:bg-slate-900/50 backdrop-blur-xl border border-white/20 dark:border-white/10 rounded-2xl p-6 md:p-8 shadow-2xl hover:shadow-3xl transition-all duration-300">
-                <div className="flex items-start gap-3 mb-4">
-                  <Zap className="w-6 h-6 text-blue-500 flex-shrink-0 mt-1" />
+              <div className="absolute -inset-1 bg-gradient-to-r from-blue-500 via-purple-500 to-pink-500 rounded-3xl opacity-0 group-hover:opacity-30 blur-2xl transition-all duration-300 group-hover:blur-3xl"></div>
+              <div className="relative bg-gradient-to-br from-white/20 to-white/10 dark:from-slate-900/70 dark:to-slate-900/50 backdrop-blur-xl border border-white/30 dark:border-white/20 rounded-3xl p-8 md:p-12 shadow-2xl hover:shadow-3xl transition-all duration-300">
+                {/* Header */}
+                <div className="flex items-start gap-4 mb-8">
+                  <div className="p-3 bg-gradient-to-br from-blue-500/20 to-purple-500/20 rounded-xl">
+                    <Zap className="w-7 h-7 text-blue-500" />
+                  </div>
                   <div>
-                    <h2 className="text-2xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-blue-600 to-purple-600 dark:from-blue-400 dark:to-purple-400">
+                    <h2 className="text-4xl md:text-5xl font-black bg-clip-text text-transparent bg-gradient-to-r from-blue-600 to-purple-600 dark:from-blue-400 dark:to-purple-400 mb-2">
                       {t("results.aiSummary")}
                     </h2>
-                    <p className="text-sm text-foreground/60">
+                    <p className="text-sm text-foreground/70">
                       {t("results.generatedUsing")}
                     </p>
                   </div>
                 </div>
-                <div className="prose prose-sm max-w-none dark:prose-invert text-foreground whitespace-pre-wrap text-base leading-relaxed">
-                  {data.summary}
+
+                {/* Step Card */}
+                <div className="mb-6">
+                  <div className="bg-gradient-to-br from-blue-500/10 to-purple-500/10 border border-blue-500/20 rounded-2xl p-8 md:p-10 min-h-64 md:min-h-72 flex flex-col justify-between">
+                    <div>
+                      <div className="inline-block px-4 py-2 bg-gradient-to-r from-blue-500/30 to-purple-500/30 border border-blue-500/50 rounded-full mb-6">
+                        <span className="text-sm font-bold text-blue-300">
+                          Step {currentStepIndex + 1} of {steps.length}
+                        </span>
+                      </div>
+                      <p className="text-2xl md:text-3xl font-bold text-foreground leading-relaxed whitespace-pre-wrap">
+                        {steps[currentStepIndex]}
+                      </p>
+                    </div>
+                  </div>
+                </div>
+
+                {/* Navigation Controls */}
+                <div className="flex items-center justify-between gap-4">
+                  <button
+                    onClick={handlePreviousStep}
+                    disabled={currentStepIndex === 0}
+                    className="p-3 rounded-xl bg-white/20 dark:bg-white/10 border border-white/20 dark:border-white/10 hover:border-blue-500/50 hover:bg-white/30 dark:hover:bg-white/20 disabled:opacity-40 disabled:cursor-not-allowed text-foreground transition-all duration-300 flex items-center justify-center"
+                  >
+                    <ChevronLeft className="w-6 h-6" />
+                  </button>
+
+                  {/* Progress Bar */}
+                  <div className="flex-1">
+                    <div className="h-2 bg-white/20 dark:bg-white/10 rounded-full overflow-hidden">
+                      <div
+                        className="h-full bg-gradient-to-r from-blue-500 to-purple-500 transition-all duration-300"
+                        style={{ width: `${((currentStepIndex + 1) / steps.length) * 100}%` }}
+                      ></div>
+                    </div>
+                  </div>
+
+                  <button
+                    onClick={handleNextStep}
+                    disabled={currentStepIndex === steps.length - 1}
+                    className="p-3 rounded-xl bg-white/20 dark:bg-white/10 border border-white/20 dark:border-white/10 hover:border-purple-500/50 hover:bg-white/30 dark:hover:bg-white/20 disabled:opacity-40 disabled:cursor-not-allowed text-foreground transition-all duration-300 flex items-center justify-center"
+                  >
+                    <ChevronRight className="w-6 h-6" />
+                  </button>
+                </div>
+
+                {/* Jump to Step */}
+                <div className="mt-6 flex flex-wrap gap-2 justify-center">
+                  {steps.map((_, index) => (
+                    <button
+                      key={index}
+                      onClick={() => setCurrentStepIndex(index)}
+                      className={`px-3 py-1 rounded-lg text-xs font-bold transition-all duration-300 ${
+                        index === currentStepIndex
+                          ? "bg-gradient-to-r from-blue-500 to-purple-500 text-white shadow-lg shadow-purple-500/30"
+                          : "bg-white/20 dark:bg-white/10 border border-white/20 dark:border-white/10 text-foreground hover:border-purple-500/50 hover:bg-white/30"
+                      }`}
+                    >
+                      {index + 1}
+                    </button>
+                  ))}
                 </div>
               </div>
             </div>
