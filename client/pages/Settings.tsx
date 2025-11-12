@@ -1,6 +1,8 @@
 import { useState, useEffect } from "react";
 import { useNavigate, Link } from "react-router-dom";
 import { ArrowLeft, Sun, Moon, Mail, Check } from "lucide-react";
+import { useI18n } from "@/i18n/context";
+import { Language } from "@/i18n/translations";
 
 const languageNames: Record<string, string> = {
   en: "English",
@@ -14,10 +16,8 @@ const languageNames: Record<string, string> = {
 
 export default function Settings() {
   const navigate = useNavigate();
+  const { language, setLanguage: setAppLanguage, t } = useI18n();
   const [darkMode, setDarkMode] = useState(false);
-  const [language, setLanguage] = useState(() => {
-    return localStorage.getItem("language") || "en";
-  });
   const [showVideosOnly, setShowVideosOnly] = useState(false);
   const [showArticlesOnly, setShowArticlesOnly] = useState(false);
   const [showLanguageSaved, setShowLanguageSaved] = useState(false);
