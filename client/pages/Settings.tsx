@@ -96,7 +96,7 @@ export default function Settings() {
           </div>
 
           {/* Language Section */}
-          <div className="bg-card border border-input rounded-lg p-6 space-y-4">
+          <div className="bg-card border border-input rounded-lg p-6 space-y-4 relative">
             <div>
               <h3 className="font-semibold text-foreground mb-2">Language</h3>
               <p className="text-sm text-foreground/60 mb-4">
@@ -104,7 +104,7 @@ export default function Settings() {
               </p>
               <select
                 value={language}
-                onChange={(e) => setLanguage(e.target.value)}
+                onChange={(e) => handleLanguageChange(e.target.value)}
                 className="w-full bg-background border border-input rounded-lg px-4 py-2 text-foreground outline-none focus:border-primary transition"
               >
                 <option value="en">English</option>
@@ -116,6 +116,12 @@ export default function Settings() {
                 <option value="ar">العربية</option>
               </select>
             </div>
+            {showLanguageSaved && (
+              <div className="absolute top-6 right-6 bg-secondary text-secondary-foreground px-3 py-1 rounded-lg text-sm font-medium flex items-center gap-2 animate-fadeIn">
+                <Check className="w-4 h-4" />
+                Saved
+              </div>
+            )}
           </div>
 
           {/* Content Filters Section */}
