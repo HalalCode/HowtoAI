@@ -229,7 +229,7 @@ export default function Results() {
                 >
                   <span className="flex items-center gap-2">
                     <Play className="w-4 h-4" />
-                    Videos ({data.videos.length})
+                    {t("results.videos")} ({data.videos.length})
                   </span>
                 </button>
                 <button
@@ -242,7 +242,7 @@ export default function Results() {
                 >
                   <span className="flex items-center gap-2">
                     <BookOpen className="w-4 h-4" />
-                    Articles ({data.articles.length})
+                    {t("results.articles")} ({data.articles.length})
                   </span>
                 </button>
               </div>
