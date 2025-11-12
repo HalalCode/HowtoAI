@@ -164,7 +164,39 @@ export default function Results() {
   };
 
   const handleNextStep = () => {
-    setCurrentStepIndex(Math.min(steps.length - 1, currentStepIndex + 1));
+    const newIndex = Math.min(steps.length - 1, currentStepIndex + 1);
+    setCurrentStepIndex(newIndex);
+
+    // Show celebration if reached the last step
+    if (newIndex === steps.length - 1) {
+      setShowCelebration(true);
+      setTimeout(() => setShowCelebration(false), 3000);
+    }
+  };
+
+  const handleSave = () => {
+    if (!data) return;
+
+    if (isSaved) {
+      // Delete
+      const saved = getTutorialByQuery(query);
+      if (saved) {
+        deleteTutorial(saved.id);
+      }
+    } else {
+      // Save
+      saveTutorial({
+        title: `How to ${query}`,
+        query: query,
+        summary: data.summary,
+        dateSaved: new Date().toLocaleDateString(),
+        tools: metadata.tools,
+        timeEstimate: metadata.timeEstimate,
+        difficulty: metadata.difficulty,
+      });
+    }
+
+    setIsSaved(!isSaved);
   };
 
   const handleShare = () => {
