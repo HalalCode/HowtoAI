@@ -158,6 +158,13 @@ export default function Home() {
             </div>
           </div>
 
+          {/* Validation Feedback */}
+          {query && !isValidQuery(query) && (
+            <p className="text-xs text-destructive/80 text-center">
+              Please enter a meaningful "How to..." question (at least 3 characters and 2 words)
+            </p>
+          )}
+
           {/* Search Button */}
           <button
             onClick={() => handleSearch()}
