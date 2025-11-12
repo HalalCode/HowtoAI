@@ -8,123 +8,9 @@ import {
   Search,
   Zap,
   BookOpen,
+  AlertCircle,
 } from "lucide-react";
-
-interface Video {
-  id: string;
-  title: string;
-  channel: string;
-  duration: string;
-  views: string;
-  thumbnail: string;
-}
-
-interface Article {
-  id: string;
-  title: string;
-  website: string;
-  snippet: string;
-  url: string;
-  icon: string;
-}
-
-const MOCK_VIDEOS: Video[] = [
-  {
-    id: "1",
-    title: "Complete Guide to Tying a Perfect Tie",
-    channel: "Fashion Academy",
-    duration: "12:45",
-    views: "2.1M",
-    thumbnail: "🎥",
-  },
-  {
-    id: "2",
-    title: "4 Easy Tie Knots for Beginners",
-    channel: "Style Tips Channel",
-    duration: "8:32",
-    views: "1.5M",
-    thumbnail: "🎬",
-  },
-  {
-    id: "3",
-    title: "How to Tie Every Knot in 10 Minutes",
-    channel: "Quick Learn",
-    duration: "10:15",
-    views: "3.2M",
-    thumbnail: "📺",
-  },
-];
-
-const MOCK_ARTICLES: Article[] = [
-  {
-    id: "1",
-    title: "The Complete Guide to Tie Knots",
-    website: "Fashion Blog",
-    snippet:
-      "Learn all the classic and modern tie knots with step-by-step instructions and images...",
-    url: "#",
-    icon: "📄",
-  },
-  {
-    id: "2",
-    title: "Mastering the Four-in-Hand Knot",
-    website: "Style Guide",
-    snippet: "A detailed tutorial on the most versatile and popular tie knot used in business...",
-    url: "#",
-    icon: "📝",
-  },
-  {
-    id: "3",
-    title: "Tie Knots for Different Occasions",
-    website: "Men's Fashion",
-    snippet:
-      "Choose the right tie knot for casual, business, and formal events...",
-    url: "#",
-    icon: "📖",
-  },
-];
-
-const MOCK_SUMMARY = `# How to Tie a Tie: Complete Guide
-
-## Tools You'll Need
-- A tie
-- A mirror (optional but helpful)
-
-## Time Required
-5-10 minutes to learn, 30 seconds to execute once mastered
-
-## Difficulty Level
-Beginner-friendly
-
-## Step-by-Step Instructions
-
-### 1. Drape the Tie
-Start with the tie around your neck, wide end on your right side, hanging about 12 inches lower than the narrow end.
-
-### 2. Cross the Tie
-Cross the wide end over the narrow end, making an X shape.
-
-### 3. Wrap Around
-Wrap the wide end around behind the narrow end from right to left.
-
-### 4. Bring Forward
-Bring the wide end back across the front from left to right.
-
-### 5. Pull Up Through Neck
-Pull the wide end up through the loop around your neck.
-
-### 6. Thread Through Knot
-Pull the wide end down through the knot you've created in front.
-
-### 7. Tighten
-Hold the narrow end and slide the knot up to tighten. Adjust until the tip of the wide end reaches your belt buckle.
-
-## Tips for Success
-- Practice makes perfect
-- Use a mirror to check symmetry
-- The narrow end should hide behind the wide end
-- Keep the knot tight but not strangling
-`;
+import { SearchResponse, Video, Article } from "@shared/api";
 
 export default function Results() {
   const [searchParams] = useSearchParams();
@@ -133,36 +19,83 @@ export default function Results() {
 
   const [activeTab, setActiveTab] = useState<"videos" | "articles">("videos");
   const [isLoading, setIsLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
   const [isSaved, setIsSaved] = useState(false);
   const [followUpQuery, setFollowUpQuery] = useState("");
   const [followUpAnswer, setFollowUpAnswer] = useState("");
+  const [isFollowUpLoading, setIsFollowUpLoading] = useState(false);
+
+  const [data, setData] = useState<SearchResponse | null>(null);
 
   useEffect(() => {
-    // Simulate loading
-    const timer = setTimeout(() => {
-      setIsLoading(false);
-    }, 2000);
-    return () => clearTimeout(timer);
+    fetchResults();
   }, [query]);
 
+  const fetchResults = async () => {
+    try {
+      setIsLoading(true);
+      setError(null);
+      const response = await fetch(`/api/search?q=${encodeURIComponent(query)}`);
+
+      if (!response.ok) {
+        throw new Error("Failed to fetch results");
+      }
+
+      const results = await response.json();
+      setData(results);
+    } catch (err) {
+      setError(
+        err instanceof Error
+          ? err.message
+          : "Failed to fetch results. Please try again."
+      );
+      console.error("Search error:", err);
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
   const handleShare = () => {
-    const text = `Check out this HowTo guide: ${query}\n\n${MOCK_SUMMARY}`;
+    if (!data) return;
+    const text = `Check out this HowTo guide: How to ${query}\n\n${data.summary}`;
     if (navigator.share) {
       navigator.share({
         title: `How to ${query}`,
         text: text,
       });
     } else {
-      alert("Share copied to clipboard!");
+      alert("Summary copied! Share it with: " + text.substring(0, 50) + "...");
     }
   };
 
-  const handleFollowUp = () => {
-    if (followUpQuery.trim()) {
-      setFollowUpAnswer(
-        `# Follow-up: ${followUpQuery}\n\nBased on the previous guide, here's additional information about "${followUpQuery}"...`
-      );
+  const handleFollowUp = async () => {
+    if (!followUpQuery.trim() || !data) return;
+
+    try {
+      setIsFollowUpLoading(true);
+      const response = await fetch("/api/follow-up", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          originalQuery: query,
+          followUpQuery: followUpQuery,
+        }),
+      });
+
+      if (!response.ok) {
+        throw new Error("Failed to get follow-up answer");
+      }
+
+      const result = await response.json();
+      setFollowUpAnswer(`## ${followUpQuery}\n\n${result.answer}`);
       setFollowUpQuery("");
+    } catch (err) {
+      console.error("Follow-up error:", err);
+      setFollowUpAnswer(
+        "Error getting follow-up answer. Please try again later."
+      );
+    } finally {
+      setIsFollowUpLoading(false);
     }
   };
 
@@ -187,7 +120,6 @@ export default function Results() {
       </header>
 
       <main className="max-w-4xl mx-auto px-4 py-8">
-        {/* Loading State */}
         {isLoading ? (
           <div className="space-y-6">
             <div className="text-center py-12 space-y-4">
@@ -202,7 +134,6 @@ export default function Results() {
               </p>
             </div>
 
-            {/* Skeleton Loaders */}
             <div className="space-y-4">
               {[1, 2, 3].map((i) => (
                 <div
@@ -212,7 +143,18 @@ export default function Results() {
               ))}
             </div>
           </div>
-        ) : (
+        ) : error ? (
+          <div className="bg-destructive/10 border border-destructive/30 rounded-lg p-6 text-center space-y-4">
+            <AlertCircle className="w-8 h-8 text-destructive mx-auto" />
+            <p className="text-foreground font-medium">Error: {error}</p>
+            <button
+              onClick={() => fetchResults()}
+              className="px-4 py-2 bg-primary text-primary-foreground rounded-lg font-medium hover:bg-primary/90 transition"
+            >
+              Try Again
+            </button>
+          </div>
+        ) : data ? (
           <div className="space-y-8 animate-fadeIn">
             {/* AI Summary Card */}
             <div className="bg-gradient-to-br from-primary/10 to-secondary/10 border border-primary/20 rounded-xl p-6 md:p-8">
@@ -227,14 +169,9 @@ export default function Results() {
                   </p>
                 </div>
               </div>
-              <div className="prose prose-sm max-w-none dark:prose-invert text-foreground whitespace-pre-line text-base leading-relaxed">
-                {MOCK_SUMMARY.split("\n")
-                  .slice(0, 15)
-                  .join("\n")}
+              <div className="prose prose-sm max-w-none dark:prose-invert text-foreground whitespace-pre-wrap text-base leading-relaxed">
+                {data.summary}
               </div>
-              <button className="mt-4 text-primary hover:underline font-medium text-sm">
-                Read Full Guide →
-              </button>
             </div>
 
             {/* Tabs */}
@@ -250,7 +187,7 @@ export default function Results() {
                 >
                   <span className="flex items-center gap-2">
                     <Play className="w-4 h-4" />
-                    Videos ({MOCK_VIDEOS.length})
+                    Videos ({data.videos.length})
                   </span>
                 </button>
                 <button
@@ -263,7 +200,7 @@ export default function Results() {
                 >
                   <span className="flex items-center gap-2">
                     <BookOpen className="w-4 h-4" />
-                    Articles ({MOCK_ARTICLES.length})
+                    Articles ({data.articles.length})
                   </span>
                 </button>
               </div>
@@ -272,62 +209,88 @@ export default function Results() {
             {/* Videos Tab */}
             {activeTab === "videos" && (
               <div className="space-y-4 animate-slideUp">
-                {MOCK_VIDEOS.map((video) => (
-                  <div
-                    key={video.id}
-                    className="bg-card border border-input hover:border-primary hover:shadow-md rounded-lg overflow-hidden transition-all duration-200 cursor-pointer group"
-                  >
-                    <div className="flex gap-4 p-4">
-                      <div className="w-24 h-24 bg-muted rounded-lg flex items-center justify-center text-2xl flex-shrink-0 group-hover:bg-primary/20 transition">
-                        {video.thumbnail}
+                {data.videos.length > 0 ? (
+                  data.videos.map((video) => (
+                    <a
+                      key={video.id}
+                      href={video.url}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="bg-card border border-input hover:border-primary hover:shadow-md rounded-lg overflow-hidden transition-all duration-200 cursor-pointer group flex gap-4 p-4"
+                    >
+                      <div className="w-24 h-24 bg-muted rounded-lg flex items-center justify-center flex-shrink-0 group-hover:bg-primary/20 transition overflow-hidden">
+                        {video.thumbnail ? (
+                          <img
+                            src={video.thumbnail}
+                            alt={video.title}
+                            className="w-full h-full object-cover"
+                          />
+                        ) : (
+                          <Play className="w-6 h-6 text-foreground/50" />
+                        )}
                       </div>
                       <div className="flex-1 min-w-0">
-                        <h3 className="font-semibold text-foreground hover:text-primary transition line-clamp-2">
+                        <h3 className="font-semibold text-foreground group-hover:text-primary transition line-clamp-2">
                           {video.title}
                         </h3>
                         <p className="text-sm text-foreground/60 mt-1">
                           {video.channel}
                         </p>
                         <div className="flex gap-4 mt-2 text-xs text-foreground/50">
-                          <span>⏱ {video.duration}</span>
-                          <span>👁 {video.views} views</span>
+                          {video.duration !== "N/A" && (
+                            <span>⏱ {video.duration}</span>
+                          )}
+                          {video.views !== "N/A" && (
+                            <span>👁 {video.views} views</span>
+                          )}
                         </div>
                       </div>
                       <div className="flex-shrink-0 flex items-center">
                         <Play className="w-6 h-6 text-primary opacity-0 group-hover:opacity-100 transition" />
                       </div>
-                    </div>
-                  </div>
-                ))}
+                    </a>
+                  ))
+                ) : (
+                  <p className="text-center text-foreground/60 py-8">
+                    No videos found
+                  </p>
+                )}
               </div>
             )}
 
             {/* Articles Tab */}
             {activeTab === "articles" && (
               <div className="space-y-4 animate-slideUp">
-                {MOCK_ARTICLES.map((article) => (
-                  <div
-                    key={article.id}
-                    className="bg-card border border-input hover:border-primary hover:shadow-md rounded-lg p-4 transition-all duration-200 cursor-pointer group"
-                  >
-                    <div className="flex gap-3 items-start">
-                      <div className="text-2xl flex-shrink-0">
-                        {article.icon}
+                {data.articles.length > 0 ? (
+                  data.articles.map((article) => (
+                    <a
+                      key={article.id}
+                      href={article.url}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="bg-card border border-input hover:border-primary hover:shadow-md rounded-lg p-4 transition-all duration-200 cursor-pointer group"
+                    >
+                      <div className="flex gap-3 items-start">
+                        <div className="text-2xl flex-shrink-0 mt-1">📄</div>
+                        <div className="flex-1 min-w-0">
+                          <h3 className="font-semibold text-foreground group-hover:text-primary transition line-clamp-2">
+                            {article.title}
+                          </h3>
+                          <p className="text-sm text-foreground/60 mt-1">
+                            {article.website}
+                          </p>
+                          <p className="text-sm text-foreground/70 mt-2 line-clamp-2">
+                            {article.snippet}
+                          </p>
+                        </div>
                       </div>
-                      <div className="flex-1 min-w-0">
-                        <h3 className="font-semibold text-foreground hover:text-primary transition line-clamp-2">
-                          {article.title}
-                        </h3>
-                        <p className="text-sm text-foreground/60 mt-1">
-                          {article.website}
-                        </p>
-                        <p className="text-sm text-foreground/70 mt-2 line-clamp-2">
-                          {article.snippet}
-                        </p>
-                      </div>
-                    </div>
-                  </div>
-                ))}
+                    </a>
+                  ))
+                ) : (
+                  <p className="text-center text-foreground/60 py-8">
+                    No articles found
+                  </p>
+                )}
               </div>
             )}
 
@@ -343,19 +306,19 @@ export default function Results() {
                   value={followUpQuery}
                   onChange={(e) => setFollowUpQuery(e.target.value)}
                   onKeyPress={(e) => e.key === "Enter" && handleFollowUp()}
-                  placeholder="E.g., 'What if I have a clip-on tie?'"
+                  placeholder="Ask a follow-up question…"
                   className="flex-1 bg-background border border-input rounded-lg px-4 py-2 outline-none focus:border-primary transition"
                 />
                 <button
                   onClick={handleFollowUp}
-                  disabled={!followUpQuery.trim()}
+                  disabled={!followUpQuery.trim() || isFollowUpLoading}
                   className="bg-primary hover:bg-primary/90 disabled:opacity-50 disabled:cursor-not-allowed text-primary-foreground font-medium px-6 py-2 rounded-lg transition"
                 >
-                  Ask
+                  {isFollowUpLoading ? "…" : "Ask"}
                 </button>
               </div>
               {followUpAnswer && (
-                <div className="bg-primary/5 border border-primary/20 rounded-lg p-4 mt-4 text-sm text-foreground whitespace-pre-line">
+                <div className="bg-primary/5 border border-primary/20 rounded-lg p-4 mt-4 text-sm text-foreground whitespace-pre-wrap">
                   {followUpAnswer}
                 </div>
               )}
@@ -386,7 +349,7 @@ export default function Results() {
               </button>
             </div>
           </div>
-        )}
+        ) : null}
       </main>
     </div>
   );
