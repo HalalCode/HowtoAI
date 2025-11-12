@@ -60,7 +60,8 @@ async function searchArticles(query: string): Promise<Article[]> {
 async function generateSummary(
   query: string,
   videos: Video[],
-  articles: Article[]
+  articles: Article[],
+  language: string = "en"
 ): Promise<string> {
   const apiKey = process.env.OPENAI_API_KEY;
   if (!apiKey) throw new Error("OPENAI_API_KEY not configured");
@@ -70,6 +71,22 @@ async function generateSummary(
     .join("\n");
   const articlesText = articles.map((a) => `- ${a.title} (${a.website})`).join("\n");
 
+  const languageNames: { [key: string]: string } = {
+    en: "English",
+    es: "Spanish",
+    fr: "French",
+    de: "German",
+    it: "Italian",
+    ja: "Japanese",
+    zh: "Chinese",
+    ar: "Arabic",
+    pt: "Portuguese",
+    ru: "Russian",
+    ko: "Korean",
+  };
+
+  const languageName = languageNames[language] || "English";
+
   const prompt = `Based on these tutorials for "${query}", create a helpful step-by-step guide with clear instructions, tools needed, time required, and difficulty level.
 
 Videos found:
@@ -78,7 +95,9 @@ ${videosText}
 Articles found:
 ${articlesText}
 
-Please generate a concise but comprehensive guide that someone could follow to accomplish "${query}".`;
+Please generate a concise but comprehensive guide that someone could follow to accomplish "${query}".
+
+IMPORTANT: Respond ONLY in ${languageName}, regardless of the language of the sources above.`;
 
   const response = await fetch("https://api.openai.com/v1/chat/completions", {
     method: "POST",
@@ -110,7 +129,7 @@ Please generate a concise but comprehensive guide that someone could follow to a
 
 export const handleSearch: RequestHandler = async (req, res) => {
   try {
-    const { q } = req.query;
+    const { q, language } = req.query;
 
     if (!q || typeof q !== "string") {
       return res.status(400).json({ error: "Missing search query" });
@@ -137,9 +156,11 @@ export const handleSearch: RequestHandler = async (req, res) => {
         .json({ error: "Please enter a valid 'How to...' question" });
     }
 
+    const selectedLanguage = typeof language === "string" ? language : "en";
+
     const videos = await searchYouTube(q);
     const articles = await searchArticles(q);
-    const summary = await generateSummary(q, videos, articles);
+    const summary = await generateSummary(q, videos, articles, selectedLanguage);
 
     const response: SearchResponse = {
       videos,
