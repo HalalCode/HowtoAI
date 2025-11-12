@@ -271,7 +271,7 @@ export default function Results() {
                       href={video.url}
                       target="_blank"
                       rel="noopener noreferrer"
-                      className="bg-card border border-input hover:border-primary hover:shadow-md rounded-lg overflow-hidden transition-all duration-200 cursor-pointer group flex gap-4 p-4"
+                      className="bg-white/10 dark:bg-slate-800/50 backdrop-blur-md border border-white/20 dark:border-white/10 hover:border-purple-500/50 hover:bg-white/20 dark:hover:bg-slate-700/70 rounded-xl overflow-hidden transition-all duration-300 cursor-pointer group flex gap-4 p-4 shadow-lg hover:shadow-2xl hover:shadow-purple-500/20"
                     >
                       <div className="w-24 h-24 bg-muted rounded-lg flex items-center justify-center flex-shrink-0 group-hover:bg-primary/20 transition overflow-hidden">
                         {video.thumbnail ? (
