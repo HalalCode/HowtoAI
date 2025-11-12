@@ -1,42 +1,36 @@
 import { useNavigate, Link } from "react-router-dom";
 import { ArrowLeft, Heart, Calendar, Trash2 } from "lucide-react";
 import { useI18n } from "@/i18n/context";
-
-interface SavedItem {
-  id: string;
-  title: string;
-  query: string;
-  dateSaved: string;
-  thumbnail: string;
-}
-
-const MOCK_SAVED: SavedItem[] = [
-  {
-    id: "1",
-    title: "How to Tie a Tie",
-    query: "tie a tie",
-    dateSaved: "Today",
-    thumbnail: "👔",
-  },
-  {
-    id: "2",
-    title: "How to Cook Rice",
-    query: "cook rice",
-    dateSaved: "Yesterday",
-    thumbnail: "🍚",
-  },
-  {
-    id: "3",
-    title: "How to Change a Tire",
-    query: "change a tire",
-    dateSaved: "2 days ago",
-    thumbnail: "🔧",
-  },
-];
+import { useState, useEffect } from "react";
+import { getSavedTutorials, deleteTutorial, SavedTutorial } from "@/lib/saved-tutorials";
 
 export default function Saved() {
   const navigate = useNavigate();
   const { t } = useI18n();
+  const [savedItems, setSavedItems] = useState<SavedTutorial[]>([]);
+
+  useEffect(() => {
+    const saved = getSavedTutorials();
+    setSavedItems(saved);
+  }, []);
+
+  const handleDelete = (id: string) => {
+    deleteTutorial(id);
+    setSavedItems(savedItems.filter(item => item.id !== id));
+  };
+
+  const getEmoji = (title: string): string => {
+    const titleLower = title.toLowerCase();
+    if (titleLower.includes("tie")) return "👔";
+    if (titleLower.includes("cook") || titleLower.includes("recipe")) return "🍚";
+    if (titleLower.includes("tire") || titleLower.includes("car")) return "🔧";
+    if (titleLower.includes("fix") || titleLower.includes("repair")) return "🛠️";
+    if (titleLower.includes("build") || titleLower.includes("make")) return "🔨";
+    if (titleLower.includes("paint") || titleLower.includes("draw")) return "🎨";
+    if (titleLower.includes("garden") || titleLower.includes("plant")) return "🌱";
+    if (titleLower.includes("workout") || titleLower.includes("exercise")) return "💪";
+    return "📚";
+  };
 
   return (
     <div className="min-h-screen overflow-hidden">
