@@ -36,6 +36,7 @@ const MOCK_SAVED: SavedItem[] = [
 
 export default function Saved() {
   const navigate = useNavigate();
+  const { t } = useI18n();
 
   return (
     <div className="min-h-screen bg-background">
