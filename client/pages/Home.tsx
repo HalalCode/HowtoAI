@@ -96,20 +96,20 @@ export default function Home() {
       {/* Navigation Header */}
       <nav className="absolute top-0 right-0 left-0 p-6 flex justify-between items-center max-w-6xl mx-auto w-full">
         <Link to="/" className="text-2xl font-bold text-primary">
-          🧠 HowTo AI
+          🧠 {t("app.name")}
         </Link>
         <div className="flex gap-4">
           <Link
             to="/saved"
             className="text-sm font-medium text-foreground/70 hover:text-foreground transition"
           >
-            Saved
+            {t("home.saved")}
           </Link>
           <Link
             to="/settings"
             className="text-sm font-medium text-foreground/70 hover:text-foreground transition"
           >
-            Settings
+            {t("home.settings")}
           </Link>
         </div>
       </nav>
@@ -124,10 +124,10 @@ export default function Home() {
             </div>
           </div>
           <h1 className="text-4xl md:text-5xl font-bold text-foreground">
-            HowTo AI
+            {t("home.title")}
           </h1>
           <p className="text-lg md:text-xl text-foreground/70">
-            Learn anything, instantly.
+            {t("home.subtitle")}
           </p>
         </div>
 
