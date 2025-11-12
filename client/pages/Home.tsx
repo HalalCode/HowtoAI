@@ -1,8 +1,9 @@
 import { useState, useRef, useEffect } from "react";
 import { useNavigate, Link } from "react-router-dom";
 import { Mic, Search } from "lucide-react";
+import { useI18n } from "@/i18n/context";
 
-const trendingSearches = [
+const trendingSearchesEnglish = [
   "How to tie a tie",
   "How to cook rice",
   "How to change a tire",
