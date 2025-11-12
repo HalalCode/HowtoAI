@@ -294,7 +294,7 @@ export default function Results() {
                   ))
                 ) : (
                   <p className="text-center text-foreground/60 py-8">
-                    No videos found
+                    {t("results.noVideos")}
                   </p>
                 )}
               </div>
