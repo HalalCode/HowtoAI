@@ -380,13 +380,13 @@ export default function Results() {
             </div>
 
             {/* Save & Share Buttons */}
-            <div className="flex gap-3 sticky bottom-6 bg-background/80 backdrop-blur p-4 rounded-lg border border-input justify-center">
+            <div className="flex gap-3 sticky bottom-6 bg-white/10 dark:bg-slate-900/50 backdrop-blur-xl p-4 rounded-2xl border border-white/20 dark:border-white/10 justify-center shadow-2xl">
               <button
                 onClick={() => setIsSaved(!isSaved)}
-                className={`flex items-center gap-2 px-6 py-3 rounded-lg font-medium transition-all ${
+                className={`flex items-center gap-2 px-6 py-3 rounded-lg font-bold transition-all duration-300 ${
                   isSaved
-                    ? "bg-secondary text-secondary-foreground"
-                    : "bg-card border border-input text-foreground hover:border-secondary"
+                    ? "bg-gradient-to-r from-pink-600 to-red-600 hover:from-pink-700 hover:to-red-700 text-white shadow-lg hover:shadow-xl hover:shadow-pink-500/30"
+                    : "bg-white/20 dark:bg-white/10 border border-white/20 dark:border-white/10 text-foreground hover:border-pink-500/50 hover:bg-white/30 dark:hover:bg-white/20"
                 }`}
               >
                 <Heart
@@ -397,7 +397,7 @@ export default function Results() {
               </button>
               <button
                 onClick={handleShare}
-                className="flex items-center gap-2 px-6 py-3 bg-card border border-input hover:border-primary text-foreground rounded-lg font-medium transition"
+                className="flex items-center gap-2 px-6 py-3 bg-white/20 dark:bg-white/10 border border-white/20 dark:border-white/10 hover:border-blue-500/50 hover:bg-white/30 dark:hover:bg-white/20 text-foreground rounded-lg font-bold transition-all duration-300"
               >
                 <Share2 className="w-5 h-5" />
                 {t("results.share")}
