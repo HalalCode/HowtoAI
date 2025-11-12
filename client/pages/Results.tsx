@@ -350,9 +350,9 @@ export default function Results() {
             )}
 
             {/* Follow-up Section */}
-            <div className="bg-card border border-input rounded-xl p-6 space-y-4">
-              <h3 className="font-semibold text-foreground flex items-center gap-2">
-                <Search className="w-5 h-5 text-primary" />
+            <div className="bg-white/10 dark:bg-slate-800/50 backdrop-blur-md border border-white/20 dark:border-white/10 rounded-2xl p-6 space-y-4 shadow-lg hover:shadow-xl transition-all duration-300">
+              <h3 className="font-bold text-foreground flex items-center gap-2">
+                <Search className="w-5 h-5 text-blue-500" />
                 {t("results.followUpQuestion")}
               </h3>
               <div className="flex gap-2">
@@ -362,18 +362,18 @@ export default function Results() {
                   onChange={(e) => setFollowUpQuery(e.target.value)}
                   onKeyPress={(e) => e.key === "Enter" && handleFollowUp()}
                   placeholder={t("results.followUpPlaceholder")}
-                  className="flex-1 bg-background border border-input rounded-lg px-4 py-2 outline-none focus:border-primary transition"
+                  className="flex-1 bg-white/20 dark:bg-white/10 border border-white/20 dark:border-white/10 rounded-lg px-4 py-2 outline-none focus:border-purple-500/50 text-foreground placeholder:text-foreground/50 transition-all duration-300"
                 />
                 <button
                   onClick={handleFollowUp}
                   disabled={!followUpQuery.trim() || isFollowUpLoading}
-                  className="bg-primary hover:bg-primary/90 disabled:opacity-50 disabled:cursor-not-allowed text-primary-foreground font-medium px-6 py-2 rounded-lg transition"
+                  className="bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 disabled:from-slate-500 disabled:to-slate-500 disabled:opacity-40 disabled:cursor-not-allowed text-white font-bold px-6 py-2 rounded-lg transition-all duration-300 shadow-lg hover:shadow-xl hover:shadow-purple-500/30"
                 >
                   {isFollowUpLoading ? t("results.askingButton") : t("results.askButton")}
                 </button>
               </div>
               {followUpAnswer && (
-                <div className="bg-primary/5 border border-primary/20 rounded-lg p-4 mt-4 text-sm text-foreground whitespace-pre-wrap">
+                <div className="bg-gradient-to-r from-blue-500/10 to-purple-500/10 border border-blue-500/30 rounded-lg p-4 mt-4 text-sm text-foreground whitespace-pre-wrap">
                   {followUpAnswer}
                 </div>
               )}
