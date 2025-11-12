@@ -276,67 +276,78 @@ export default function Results() {
                   </button>
                 </div>
 
-                {/* Step Card */}
-                <div className="mb-6">
-                  <div className="bg-gradient-to-br from-blue-500/10 to-purple-500/10 border border-blue-500/20 rounded-2xl p-8 md:p-10 min-h-64 md:min-h-72 flex flex-col justify-between">
-                    <div>
-                      <div className="inline-block px-4 py-2 bg-gradient-to-r from-blue-500/30 to-purple-500/30 border border-blue-500/50 rounded-full mb-6">
-                        <span className="text-sm font-bold text-blue-300">
-                          Step {currentStepIndex + 1} of {steps.length}
-                        </span>
+                {useStepView ? (
+                  <>
+                    {/* Step Card */}
+                    <div className="mb-6">
+                      <div className="bg-gradient-to-br from-blue-500/10 to-purple-500/10 border border-blue-500/20 rounded-2xl p-8 md:p-10 min-h-64 md:min-h-72 flex flex-col justify-between">
+                        <div>
+                          <div className="inline-block px-4 py-2 bg-gradient-to-r from-blue-500/30 to-purple-500/30 border border-blue-500/50 rounded-full mb-6">
+                            <span className="text-sm font-bold text-blue-300">
+                              Step {currentStepIndex + 1} of {steps.length}
+                            </span>
+                          </div>
+                          <p className="text-2xl md:text-3xl font-bold text-foreground leading-relaxed whitespace-pre-wrap">
+                            {steps[currentStepIndex]}
+                          </p>
+                        </div>
                       </div>
-                      <p className="text-2xl md:text-3xl font-bold text-foreground leading-relaxed whitespace-pre-wrap">
-                        {steps[currentStepIndex]}
-                      </p>
                     </div>
-                  </div>
-                </div>
 
-                {/* Navigation Controls */}
-                <div className="flex items-center justify-between gap-4">
-                  <button
-                    onClick={handlePreviousStep}
-                    disabled={currentStepIndex === 0}
-                    className="p-3 rounded-xl bg-white/20 dark:bg-white/10 border border-white/20 dark:border-white/10 hover:border-blue-500/50 hover:bg-white/30 dark:hover:bg-white/20 disabled:opacity-40 disabled:cursor-not-allowed text-foreground transition-all duration-300 flex items-center justify-center"
-                  >
-                    <ChevronLeft className="w-6 h-6" />
-                  </button>
+                    {/* Navigation Controls */}
+                    <div className="flex items-center justify-between gap-4">
+                      <button
+                        onClick={handlePreviousStep}
+                        disabled={currentStepIndex === 0}
+                        className="p-3 rounded-xl bg-white/20 dark:bg-white/10 border border-white/20 dark:border-white/10 hover:border-blue-500/50 hover:bg-white/30 dark:hover:bg-white/20 disabled:opacity-40 disabled:cursor-not-allowed text-foreground transition-all duration-300 flex items-center justify-center"
+                      >
+                        <ChevronLeft className="w-6 h-6" />
+                      </button>
 
-                  {/* Progress Bar */}
-                  <div className="flex-1">
-                    <div className="h-2 bg-white/20 dark:bg-white/10 rounded-full overflow-hidden">
-                      <div
-                        className="h-full bg-gradient-to-r from-blue-500 to-purple-500 transition-all duration-300"
-                        style={{ width: `${((currentStepIndex + 1) / steps.length) * 100}%` }}
-                      ></div>
+                      {/* Progress Bar */}
+                      <div className="flex-1">
+                        <div className="h-2 bg-white/20 dark:bg-white/10 rounded-full overflow-hidden">
+                          <div
+                            className="h-full bg-gradient-to-r from-blue-500 to-purple-500 transition-all duration-300"
+                            style={{ width: `${((currentStepIndex + 1) / steps.length) * 100}%` }}
+                          ></div>
+                        </div>
+                      </div>
+
+                      <button
+                        onClick={handleNextStep}
+                        disabled={currentStepIndex === steps.length - 1}
+                        className="p-3 rounded-xl bg-white/20 dark:bg-white/10 border border-white/20 dark:border-white/10 hover:border-purple-500/50 hover:bg-white/30 dark:hover:bg-white/20 disabled:opacity-40 disabled:cursor-not-allowed text-foreground transition-all duration-300 flex items-center justify-center"
+                      >
+                        <ChevronRight className="w-6 h-6" />
+                      </button>
                     </div>
+
+                    {/* Jump to Step */}
+                    <div className="mt-6 flex flex-wrap gap-2 justify-center">
+                      {steps.map((_, index) => (
+                        <button
+                          key={index}
+                          onClick={() => setCurrentStepIndex(index)}
+                          className={`px-3 py-1 rounded-lg text-xs font-bold transition-all duration-300 ${
+                            index === currentStepIndex
+                              ? "bg-gradient-to-r from-blue-500 to-purple-500 text-white shadow-lg shadow-purple-500/30"
+                              : "bg-white/20 dark:bg-white/10 border border-white/20 dark:border-white/10 text-foreground hover:border-purple-500/50 hover:bg-white/30"
+                          }`}
+                        >
+                          {index + 1}
+                        </button>
+                      ))}
+                    </div>
+                  </>
+                ) : (
+                  /* Full Text View */
+                  <div className="bg-gradient-to-br from-blue-500/10 to-purple-500/10 border border-blue-500/20 rounded-2xl p-8 md:p-10">
+                    <p className="text-lg md:text-xl font-medium text-foreground leading-relaxed whitespace-pre-wrap prose prose-sm max-w-none dark:prose-invert">
+                      {data.summary}
+                    </p>
                   </div>
-
-                  <button
-                    onClick={handleNextStep}
-                    disabled={currentStepIndex === steps.length - 1}
-                    className="p-3 rounded-xl bg-white/20 dark:bg-white/10 border border-white/20 dark:border-white/10 hover:border-purple-500/50 hover:bg-white/30 dark:hover:bg-white/20 disabled:opacity-40 disabled:cursor-not-allowed text-foreground transition-all duration-300 flex items-center justify-center"
-                  >
-                    <ChevronRight className="w-6 h-6" />
-                  </button>
-                </div>
-
-                {/* Jump to Step */}
-                <div className="mt-6 flex flex-wrap gap-2 justify-center">
-                  {steps.map((_, index) => (
-                    <button
-                      key={index}
-                      onClick={() => setCurrentStepIndex(index)}
-                      className={`px-3 py-1 rounded-lg text-xs font-bold transition-all duration-300 ${
-                        index === currentStepIndex
-                          ? "bg-gradient-to-r from-blue-500 to-purple-500 text-white shadow-lg shadow-purple-500/30"
-                          : "bg-white/20 dark:bg-white/10 border border-white/20 dark:border-white/10 text-foreground hover:border-purple-500/50 hover:bg-white/30"
-                      }`}
-                    >
-                      {index + 1}
-                    </button>
-                  ))}
-                </div>
+                )}
               </div>
             </div>
 
