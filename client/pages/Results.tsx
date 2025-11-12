@@ -380,14 +380,14 @@ export default function Results() {
                   className="w-5 h-5"
                   fill={isSaved ? "currentColor" : "none"}
                 />
-                {isSaved ? "Saved" : "Save"}
+                {isSaved ? t("results.saved") : t("results.save")}
               </button>
               <button
                 onClick={handleShare}
                 className="flex items-center gap-2 px-6 py-3 bg-card border border-input hover:border-primary text-foreground rounded-lg font-medium transition"
               >
                 <Share2 className="w-5 h-5" />
-                Share
+                {t("results.share")}
               </button>
             </div>
           </div>
