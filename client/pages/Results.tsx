@@ -42,6 +42,39 @@ export default function Results() {
 
   const [data, setData] = useState<SearchResponse | null>(null);
 
+  // Extract metadata from summary
+  const extractMetadata = (summary: string) => {
+    const tools: string[] = [];
+    const toolPattern = /(?:Tools?:?\s*|Required:?\s*|You'll?\s+need:?\s*)(.*?)(?:\n|Difficulty|Time|Step \d+:|$)/gi;
+    const toolMatch = summary.match(toolPattern);
+    if (toolMatch) {
+      const toolText = toolMatch[0];
+      const toolItems = toolText.split(/[,•\n-]/).filter(item => item.trim().length > 0);
+      toolItems.forEach(item => {
+        const cleaned = item.replace(/Tools?:?|Required:?|You'll?\s+need:?/gi, '').trim();
+        if (cleaned && !cleaned.includes('Difficulty') && !cleaned.includes('Time')) {
+          tools.push(cleaned);
+        }
+      });
+    }
+
+    let timeEstimate = "";
+    const timePattern = /Time:?\s*(\d+\s*(?:minutes?|hours?|mins?|hrs?))/i;
+    const timeMatch = summary.match(timePattern);
+    if (timeMatch) {
+      timeEstimate = timeMatch[1];
+    }
+
+    let difficulty = "";
+    const difficultyPattern = /Difficulty:?\s*([\w\s]+?)(?:\n|Step \d+:|$)/i;
+    const difficultyMatch = summary.match(difficultyPattern);
+    if (difficultyMatch) {
+      difficulty = difficultyMatch[1].trim();
+    }
+
+    return { tools, timeEstimate, difficulty };
+  };
+
   // Parse summary into steps
   const parseStepsFromSummary = (summary: string): string[] => {
     // Split by "Step X:" pattern
