@@ -34,6 +34,7 @@ export default function Results() {
   const [steps, setSteps] = useState<string[]>([]);
   const [useStepView, setUseStepView] = useState(true);
   const [showCelebration, setShowCelebration] = useState(false);
+  const [saveIndicator, setSaveIndicator] = useState(false);
   const [metadata, setMetadata] = useState<{
     tools: string[];
     timeEstimate: string;
