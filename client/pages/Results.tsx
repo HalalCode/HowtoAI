@@ -78,74 +78,73 @@ export default function Results() {
 
   // Parse summary into steps
   const parseStepsFromSummary = (summary: string): string[] => {
-    // First, remove metadata headers (Difficulty, Time, Tools sections)
-    let cleanSummary = summary;
+    // First, find where the actual steps start (after metadata)
+    let contentStart = 0;
+    const metadataEndMatch = summary.match(/(Difficulty|Difficulty Level|Time Required|Tools Needed|Tools|Time)[^\n]*\n/i);
+    if (metadataEndMatch && metadataEndMatch.index !== undefined) {
+      contentStart = metadataEndMatch.index + metadataEndMatch[0].length;
+    }
 
-    // Remove common metadata patterns at the beginning
-    cleanSummary = cleanSummary
-      .replace(/^[^0-9]*?(Title|How to|Difficulty Level:|Time Required:|Tools Needed:)[^\n]*\n?/gmi, '')
-      .trim();
+    const mainContent = summary.substring(contentStart).trim();
 
     // Try Pattern 1: "Step 1:", "Step 2:", etc.
     let stepPattern = /Step\s+\d+:\s*/gi;
-    let parts = summary.split(stepPattern);
+    let parts = mainContent.split(stepPattern);
 
     if (parts.length > 1) {
-      // Clean up and return
       const cleanedParts = parts
-        .slice(1) // Skip the first empty/header part
-        .map(part => part.trim())
-        .filter(part => part.length > 0);
+        .filter(part => part.trim().length > 0)
+        .map(part => part.trim());
 
       if (cleanedParts.length > 0) {
         return cleanedParts;
       }
     }
 
-    // Try Pattern 2: Numbered items "1. ", "2. ", etc.
-    if (cleanSummary.includes('\n')) {
-      const lines = cleanSummary.split('\n');
-      const stepLines: string[] = [];
-      let currentStep = '';
+    // Try Pattern 2: Numbered items "1. ", "2. ", etc. (including with line breaks)
+    const lines = mainContent.split('\n');
+    const stepLines: string[] = [];
+    let currentStep = '';
+    let foundFirstStep = false;
 
-      for (const line of lines) {
-        const trimmed = line.trim();
-        // Match lines that start with a number followed by a period or closing paren
-        if (/^\d+[\.\)]\s+/.test(trimmed)) {
-          if (currentStep) {
-            stepLines.push(currentStep.trim());
-          }
-          // Remove the number and period/paren, keep just the content
-          currentStep = trimmed.replace(/^\d+[\.\)]\s+/, '');
-        } else if (trimmed && currentStep) {
-          // Continue building current step
-          currentStep += ' ' + trimmed;
-        } else if (trimmed && !currentStep) {
-          // Skip non-step content before first step
-          continue;
+    for (const line of lines) {
+      const trimmed = line.trim();
+
+      // Check if this line starts a new step (number followed by period or paren)
+      if (/^\d+[\.\)]\s+/.test(trimmed)) {
+        foundFirstStep = true;
+        // Save previous step if exists
+        if (currentStep.trim()) {
+          stepLines.push(currentStep.trim());
         }
-      }
-      if (currentStep) {
-        stepLines.push(currentStep.trim());
-      }
-
-      if (stepLines.length > 1) {
-        return stepLines;
+        // Start new step - remove the number prefix
+        currentStep = trimmed.replace(/^\d+[\.\)]\s+/, '');
+      } else if (trimmed && foundFirstStep) {
+        // Continue building current step
+        currentStep += ' ' + trimmed;
       }
     }
 
-    // Pattern 3: Try inline numbered format with periods
-    const inlinePattern = /\d+[\.\)]\s+[^0-9]*?(?=\d+[\.\)]|$)/g;
-    const matches = cleanSummary.match(inlinePattern);
+    // Don't forget the last step
+    if (currentStep.trim()) {
+      stepLines.push(currentStep.trim());
+    }
 
-    if (matches && matches.length > 1) {
-      return matches
-        .map(m => m.replace(/^\d+[\.\)]\s+/, '').trim())
-        .filter(m => m.length > 0);
+    if (stepLines.length > 1) {
+      return stepLines;
+    }
+
+    // Pattern 3: Try splitting by double newline (paragraph breaks)
+    const paragraphs = mainContent.split(/\n\s*\n+/)
+      .map(p => p.trim())
+      .filter(p => p.length > 0 && !p.match(/^(Difficulty|Time|Tools)/i));
+
+    if (paragraphs.length > 1) {
+      return paragraphs;
     }
 
     // If no steps found, return the whole summary as one step
-    return [cleanSummary || summary];
+    return [summary];
   };
 
   const isValidQuery = (q: string): boolean => {
