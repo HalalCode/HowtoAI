@@ -1,13 +1,26 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useNavigate, Link } from "react-router-dom";
-import { ArrowLeft, Sun, Moon, Mail } from "lucide-react";
+import { ArrowLeft, Sun, Moon, Mail, Check } from "lucide-react";
+
+const languageNames: Record<string, string> = {
+  en: "English",
+  es: "Español",
+  fr: "Français",
+  de: "Deutsch",
+  ja: "日本語",
+  zh: "中文",
+  ar: "العربية",
+};
 
 export default function Settings() {
   const navigate = useNavigate();
   const [darkMode, setDarkMode] = useState(false);
-  const [language, setLanguage] = useState("en");
+  const [language, setLanguage] = useState(() => {
+    return localStorage.getItem("language") || "en";
+  });
   const [showVideosOnly, setShowVideosOnly] = useState(false);
   const [showArticlesOnly, setShowArticlesOnly] = useState(false);
+  const [showLanguageSaved, setShowLanguageSaved] = useState(false);
 
   const handleDarkModeToggle = () => {
     setDarkMode(!darkMode);
@@ -16,6 +29,13 @@ export default function Settings() {
     } else {
       document.documentElement.classList.remove("dark");
     }
+  };
+
+  const handleLanguageChange = (newLanguage: string) => {
+    setLanguage(newLanguage);
+    localStorage.setItem("language", newLanguage);
+    setShowLanguageSaved(true);
+    setTimeout(() => setShowLanguageSaved(false), 2000);
   };
 
   return (
