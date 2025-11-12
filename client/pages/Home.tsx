@@ -182,10 +182,10 @@ export default function Home() {
         {/* Trending Searches */}
         <div className="space-y-4 animate-slideUp">
           <h3 className="text-sm font-semibold text-foreground/60 uppercase tracking-wide px-2">
-            Trending Searches
+            {t("home.trendingSearches")}
           </h3>
           <div className="flex flex-wrap gap-2">
-            {trendingSearches.map((search, index) => (
+            {trendingSearchesEnglish.map((search, index) => (
               <button
                 key={index}
                 onClick={() => handleTrendingClick(search)}
