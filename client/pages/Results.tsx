@@ -16,6 +16,7 @@ import { useI18n } from "@/i18n/context";
 export default function Results() {
   const [searchParams] = useSearchParams();
   const navigate = useNavigate();
+  const { t } = useI18n();
   const query = searchParams.get("q") || "";
 
   const [activeTab, setActiveTab] = useState<"videos" | "articles">("videos");
