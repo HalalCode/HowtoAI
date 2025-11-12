@@ -330,7 +330,7 @@ export default function Results() {
                   ))
                 ) : (
                   <p className="text-center text-foreground/60 py-8">
-                    No articles found
+                    {t("results.noArticles")}
                   </p>
                 )}
               </div>
