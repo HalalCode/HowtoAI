@@ -154,10 +154,10 @@ export default function Results() {
                 <div className="text-4xl animate-bounce">✨</div>
               </div>
               <p className="text-lg text-foreground/70">
-                Finding the best tutorials…
+                {t("results.finding")}
               </p>
               <p className="text-sm text-foreground/50">
-                Our AI is analyzing top videos and articles
+                {t("results.analyzingTutorials")}
               </p>
             </div>
 
