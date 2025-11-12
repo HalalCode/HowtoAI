@@ -1,5 +1,6 @@
 import { useNavigate, Link } from "react-router-dom";
 import { ArrowLeft, Heart, Calendar, Trash2 } from "lucide-react";
+import { useI18n } from "@/i18n/context";
 
 interface SavedItem {
   id: string;
