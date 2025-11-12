@@ -171,7 +171,7 @@ export default function Settings() {
           {/* Footer */}
           <div className="text-center py-8">
             <p className="text-sm text-foreground/50">
-              HowTo AI v1.0 • Made with ❤️
+              {t("settings.madeWith")}
             </p>
           </div>
         </div>
