@@ -155,15 +155,15 @@ export default function Settings() {
                 <Mail className="w-5 h-5 text-primary" />
                 <div>
                   <h3 className="font-semibold text-foreground">
-                    Send Feedback
+                    {t("settings.sendFeedback")}
                   </h3>
                   <p className="text-sm text-foreground/60">
-                    Help us improve HowTo AI
+                    {t("settings.helpImprove")}
                   </p>
                 </div>
               </div>
               <button className="px-6 py-2 bg-primary text-primary-foreground rounded-lg font-medium hover:bg-primary/90 transition">
-                Send
+                {t("settings.send")}
               </button>
             </div>
           </div>
