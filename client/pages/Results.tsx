@@ -627,6 +627,15 @@ export default function Results() {
               )}
             </div>
 
+            {/* Save State Indicator */}
+            {saveIndicator && (
+              <div className="fixed bottom-24 right-4 animate-bounce">
+                <div className="bg-gradient-to-r from-pink-600 to-red-600 text-white px-6 py-3 rounded-full font-bold shadow-2xl shadow-pink-500/50 flex items-center gap-2">
+                  <span className="text-xl">{isSaved ? "❤️ Saved!" : "💔 Removed"}</span>
+                </div>
+              </div>
+            )}
+
             {/* Save & Share Buttons */}
             <div className="flex gap-3 sticky bottom-6 bg-white/10 dark:bg-slate-900/50 backdrop-blur-xl p-4 rounded-2xl border border-white/20 dark:border-white/10 justify-center shadow-2xl">
               <button
