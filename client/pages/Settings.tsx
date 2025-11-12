@@ -97,9 +97,9 @@ export default function Settings() {
           {/* Language Section */}
           <div className="bg-card border border-input rounded-lg p-6 space-y-4 relative">
             <div>
-              <h3 className="font-semibold text-foreground mb-2">Language</h3>
+              <h3 className="font-semibold text-foreground mb-2">{t("settings.language")}</h3>
               <p className="text-sm text-foreground/60 mb-4">
-                Choose your preferred language
+                {t("settings.chooseLanguage")}
               </p>
               <select
                 value={language}
