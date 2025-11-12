@@ -9,6 +9,8 @@ import {
   Zap,
   BookOpen,
   AlertCircle,
+  ChevronLeft,
+  ChevronRight,
 } from "lucide-react";
 import { SearchResponse, Video, Article } from "@shared/api";
 import { useI18n } from "@/i18n/context";
@@ -27,8 +29,29 @@ export default function Results() {
   const [followUpQuery, setFollowUpQuery] = useState("");
   const [followUpAnswer, setFollowUpAnswer] = useState("");
   const [isFollowUpLoading, setIsFollowUpLoading] = useState(false);
+  const [currentStepIndex, setCurrentStepIndex] = useState(0);
+  const [steps, setSteps] = useState<string[]>([]);
 
   const [data, setData] = useState<SearchResponse | null>(null);
+
+  // Parse summary into steps
+  const parseStepsFromSummary = (summary: string): string[] => {
+    // Split by "Step X:" pattern
+    const stepPattern = /Step\s+\d+:/gi;
+    const parts = summary.split(stepPattern);
+
+    // Filter out empty strings and trim whitespace
+    const parsedSteps = parts
+      .map(part => part.trim())
+      .filter(part => part.length > 0);
+
+    // If no steps found, return the whole summary as one step
+    if (parsedSteps.length === 0) {
+      return [summary];
+    }
+
+    return parsedSteps;
+  };
 
   const isValidQuery = (q: string): boolean => {
     const trimmed = q.trim();
