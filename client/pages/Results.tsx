@@ -27,8 +27,27 @@ export default function Results() {
 
   const [data, setData] = useState<SearchResponse | null>(null);
 
+  const isValidQuery = (q: string): boolean => {
+    const trimmed = q.trim();
+    if (trimmed.length < 3) return false;
+    const words = trimmed.split(/\s+/).filter((w) => w.length > 1);
+    if (words.length < 2) return false;
+    if (/^[a-zA-Z0-9]{1,2}$/.test(trimmed)) return false;
+    return true;
+  };
+
   useEffect(() => {
-    fetchResults();
+    if (query && !isValidQuery(query)) {
+      setError(
+        "Invalid search query. Please enter a meaningful 'How to...' question (at least 3 characters and 2 words)."
+      );
+      setIsLoading(false);
+      return;
+    }
+
+    if (query) {
+      fetchResults();
+    }
   }, [query]);
 
   const fetchResults = async () => {
@@ -37,12 +56,18 @@ export default function Results() {
       setError(null);
       const response = await fetch(`/api/search?q=${encodeURIComponent(query)}`);
 
+      const contentType = response.headers.get("content-type");
+      const responseData = contentType?.includes("application/json")
+        ? await response.json()
+        : { error: "Invalid response format" };
+
       if (!response.ok) {
-        throw new Error("Failed to fetch results");
+        throw new Error(
+          responseData.error || `HTTP ${response.status}: Failed to fetch results`
+        );
       }
 
-      const results = await response.json();
-      setData(results);
+      setData(responseData);
     } catch (err) {
       setError(
         err instanceof Error
