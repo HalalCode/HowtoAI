@@ -119,3 +119,18 @@
     white-space: pre;
   }
 }
+
+@layer components {
+  .shimmer-skeleton {
+    background: linear-gradient(
+      90deg,
+      hsl(var(--muted)) 0%,
+      hsl(var(--muted)) 20%,
+      hsl(var(--muted)) 50%,
+      hsl(var(--muted)) 80%,
+      hsl(var(--muted)) 100%
+    );
+    background-size: 1000px 100%;
+    animation: shimmer 2s infinite;
+  }
+}
