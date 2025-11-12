@@ -204,10 +204,10 @@ export default function Results() {
                 <Zap className="w-6 h-6 text-primary flex-shrink-0 mt-1" />
                 <div>
                   <h2 className="text-2xl font-bold text-foreground">
-                    AI Summary
+                    {t("results.aiSummary")}
                   </h2>
                   <p className="text-sm text-foreground/60">
-                    Generated using the top tutorials
+                    {t("results.generatedUsing")}
                   </p>
                 </div>
               </div>
