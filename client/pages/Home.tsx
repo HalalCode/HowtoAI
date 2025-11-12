@@ -1,5 +1,5 @@
 import { useState, useRef, useEffect } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, Link } from "react-router-dom";
 import { Mic, Search } from "lucide-react";
 
 const trendingSearches = [
@@ -81,14 +81,22 @@ export default function Home() {
     <div className="min-h-screen bg-gradient-to-br from-background via-background to-blue-50 dark:from-background dark:via-background dark:to-blue-950/20 flex flex-col items-center justify-center px-4 py-8">
       {/* Navigation Header */}
       <nav className="absolute top-0 right-0 left-0 p-6 flex justify-between items-center max-w-6xl mx-auto w-full">
-        <div className="text-2xl font-bold text-primary">🧠 HowTo AI</div>
+        <Link to="/" className="text-2xl font-bold text-primary">
+          🧠 HowTo AI
+        </Link>
         <div className="flex gap-4">
-          <button className="text-sm font-medium text-foreground/70 hover:text-foreground transition">
+          <Link
+            to="/saved"
+            className="text-sm font-medium text-foreground/70 hover:text-foreground transition"
+          >
             Saved
-          </button>
-          <button className="text-sm font-medium text-foreground/70 hover:text-foreground transition">
+          </Link>
+          <Link
+            to="/settings"
+            className="text-sm font-medium text-foreground/70 hover:text-foreground transition"
+          >
             Settings
-          </button>
+          </Link>
         </div>
       </nav>
 
