@@ -84,7 +84,7 @@ export default function Saved() {
                     <div className="flex items-center gap-4 mt-2 text-sm text-foreground/60">
                       <span className="flex items-center gap-1">
                         <Calendar className="w-4 h-4" />
-                        Saved {item.dateSaved}
+                        {t("saved.savedDate")} {item.dateSaved}
                       </span>
                     </div>
                   </div>
