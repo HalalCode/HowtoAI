@@ -11,6 +11,7 @@ import {
   AlertCircle,
 } from "lucide-react";
 import { SearchResponse, Video, Article } from "@shared/api";
+import { useI18n } from "@/i18n/context";
 
 export default function Results() {
   const [searchParams] = useSearchParams();
