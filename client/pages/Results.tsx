@@ -12,11 +12,12 @@ import {
 } from "lucide-react";
 import { SearchResponse, Video, Article } from "@shared/api";
 import { useI18n } from "@/i18n/context";
+import { Language } from "@/i18n/translations";
 
 export default function Results() {
   const [searchParams] = useSearchParams();
   const navigate = useNavigate();
-  const { t } = useI18n();
+  const { t, language } = useI18n();
   const query = searchParams.get("q") || "";
 
   const [activeTab, setActiveTab] = useState<"videos" | "articles">("videos");
@@ -56,7 +57,7 @@ export default function Results() {
     try {
       setIsLoading(true);
       setError(null);
-      const response = await fetch(`/api/search?q=${encodeURIComponent(query)}`);
+      const response = await fetch(`/api/search?q=${encodeURIComponent(query)}&language=${language}`);
 
       const contentType = response.headers.get("content-type");
       const responseData = contentType?.includes("application/json")
@@ -106,6 +107,7 @@ export default function Results() {
         body: JSON.stringify({
           originalQuery: query,
           followUpQuery: followUpQuery,
+          language: language,
         }),
       });
 
