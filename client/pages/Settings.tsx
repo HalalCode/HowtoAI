@@ -118,7 +118,7 @@ export default function Settings() {
             {showLanguageSaved && (
               <div className="absolute top-6 right-6 bg-secondary text-secondary-foreground px-3 py-1 rounded-lg text-sm font-medium flex items-center gap-2 animate-fadeIn">
                 <Check className="w-4 h-4" />
-                Saved
+                {t("settings.saved")}
               </div>
             )}
           </div>
