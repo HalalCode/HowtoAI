@@ -78,21 +78,65 @@ export default function Results() {
 
   // Parse summary into steps
   const parseStepsFromSummary = (summary: string): string[] => {
-    // Split by "Step X:" pattern
-    const stepPattern = /Step\s+\d+:/gi;
-    const parts = summary.split(stepPattern);
+    // Try multiple step patterns
+    // Pattern 1: "Step 1:", "Step 2:", etc.
+    let stepPattern = /Step\s+\d+:\s*/gi;
+    let parts = summary.split(stepPattern);
 
-    // Filter out empty strings and trim whitespace
-    const parsedSteps = parts
-      .map(part => part.trim())
-      .filter(part => part.length > 0);
+    // If only one part (no "Step X:" format found), try numbered format
+    if (parts.length <= 1) {
+      // Pattern 2: "1.", "2.", "3.", etc. at the start of a line
+      stepPattern = /\n\s*\d+\.\s+/g;
+      const splitParts = summary.split(stepPattern);
 
-    // If no steps found, return the whole summary as one step
-    if (parsedSteps.length === 0) {
-      return [summary];
+      // Filter and clean
+      const cleanedParts = splitParts
+        .map(part => part.trim())
+        .filter(part => part.length > 0);
+
+      if (cleanedParts.length > 1) {
+        return cleanedParts;
+      }
+
+      // Pattern 3: Multiple periods (.) that might indicate step breaks
+      // If we still don't have steps, split by newline-preceded numbers
+      if (summary.includes('\n')) {
+        const lines = summary.split('\n');
+        const stepLines: string[] = [];
+        let currentStep = '';
+
+        for (const line of lines) {
+          const trimmed = line.trim();
+          if (/^\d+\./.test(trimmed)) {
+            if (currentStep) {
+              stepLines.push(currentStep.trim());
+            }
+            currentStep = trimmed;
+          } else if (trimmed) {
+            currentStep += ' ' + trimmed;
+          }
+        }
+        if (currentStep) {
+          stepLines.push(currentStep.trim());
+        }
+
+        if (stepLines.length > 1) {
+          return stepLines;
+        }
+      }
+    } else {
+      // Clean up the parts from "Step X:" split
+      const cleanedParts = parts
+        .map(part => part.trim())
+        .filter(part => part.length > 0);
+
+      if (cleanedParts.length > 0) {
+        return cleanedParts;
+      }
     }
 
-    return parsedSteps;
+    // If no steps found, return the whole summary as one step
+    return [summary];
   };
 
   const isValidQuery = (q: string): boolean => {
