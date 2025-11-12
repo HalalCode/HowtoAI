@@ -39,26 +39,38 @@ export default function Saved() {
   const { t } = useI18n();
 
   return (
-    <div className="min-h-screen bg-background">
+    <div className="min-h-screen overflow-hidden">
+      {/* Animated Background */}
+      <div className="fixed inset-0 -z-10">
+        <div className="absolute inset-0 bg-gradient-to-br from-background via-background to-purple-900/10 dark:from-background dark:via-slate-950 dark:to-purple-950/20"></div>
+        <div className="absolute top-0 left-1/4 w-96 h-96 bg-blue-400/10 rounded-full mix-blend-multiply filter blur-3xl animate-pulse"></div>
+        <div className="absolute top-1/3 right-1/4 w-96 h-96 bg-purple-400/10 rounded-full mix-blend-multiply filter blur-3xl animate-pulse" style={{animationDelay: '2s'}}></div>
+        <div className="absolute bottom-0 left-1/2 w-96 h-96 bg-pink-400/10 rounded-full mix-blend-multiply filter blur-3xl animate-pulse" style={{animationDelay: '4s'}}></div>
+      </div>
+
       {/* Header */}
-      <header className="sticky top-0 z-50 bg-card/95 backdrop-blur border-b border-input shadow-sm">
+      <header className="sticky top-0 z-50 bg-white/10 dark:bg-slate-900/50 backdrop-blur-xl border-b border-white/20 dark:border-white/10 shadow-lg">
         <div className="max-w-4xl mx-auto px-4 py-4 flex items-center justify-between">
           <div className="flex items-center gap-4 flex-1">
             <Link
               to="/"
-              className="p-2 hover:bg-muted rounded-lg transition"
+              className="p-2 hover:bg-white/20 dark:hover:bg-white/10 rounded-lg transition-all duration-300"
               title="Back to home"
             >
               <ArrowLeft className="w-5 h-5 text-foreground" />
             </Link>
-            <h1 className="text-2xl font-bold text-foreground">
-              <Heart className="w-6 h-6 inline mr-2 text-secondary" />
+            <h1 className="text-2xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-pink-600 to-red-600 dark:from-pink-400 dark:to-red-400">
+              <Heart className="w-6 h-6 inline mr-2" style={{
+                backgroundImage: 'linear-gradient(135deg, #ec4899, #dc2626)',
+                WebkitBackgroundClip: 'text',
+                WebkitTextFillColor: 'transparent'
+              }} />
               {t("saved.myTutorials")}
             </h1>
           </div>
           <Link
             to="/settings"
-            className="text-sm font-medium text-foreground/70 hover:text-foreground transition"
+            className="text-sm font-semibold text-foreground/80 hover:text-transparent hover:bg-clip-text hover:bg-gradient-to-r hover:from-blue-500 hover:to-purple-500 transition-all duration-300"
           >
             {t("settings.settings")}
           </Link>
@@ -71,14 +83,14 @@ export default function Saved() {
             {MOCK_SAVED.map((item) => (
               <div
                 key={item.id}
-                className="bg-card border border-input hover:border-primary hover:shadow-md rounded-lg overflow-hidden transition-all duration-200 cursor-pointer group"
+                className="bg-white/10 dark:bg-slate-800/50 backdrop-blur-md border border-white/20 dark:border-white/10 hover:border-purple-500/50 hover:bg-white/20 dark:hover:bg-slate-700/70 rounded-xl overflow-hidden transition-all duration-300 cursor-pointer group shadow-lg hover:shadow-2xl hover:shadow-purple-500/20"
               >
                 <div className="flex gap-4 p-4">
-                  <div className="w-20 h-20 bg-muted rounded-lg flex items-center justify-center text-3xl flex-shrink-0 group-hover:bg-primary/20 transition">
+                  <div className="w-20 h-20 bg-gradient-to-br from-blue-500/20 to-purple-500/20 rounded-lg flex items-center justify-center text-3xl flex-shrink-0 group-hover:from-blue-500/30 group-hover:to-purple-500/30 transition">
                     {item.thumbnail}
                   </div>
                   <div className="flex-1">
-                    <h3 className="font-semibold text-foreground group-hover:text-primary transition">
+                    <h3 className="font-bold text-foreground group-hover:text-transparent group-hover:bg-clip-text group-hover:bg-gradient-to-r group-hover:from-blue-600 group-hover:to-purple-600 transition">
                       {item.title}
                     </h3>
                     <div className="flex items-center gap-4 mt-2 text-sm text-foreground/60">
@@ -89,7 +101,7 @@ export default function Saved() {
                     </div>
                   </div>
                   <button
-                    className="p-2 hover:bg-destructive/10 hover:text-destructive rounded-lg transition flex-shrink-0"
+                    className="p-2 hover:bg-red-500/20 hover:text-red-500 rounded-lg transition-all duration-300 flex-shrink-0 font-bold"
                     title="Delete"
                   >
                     <Trash2 className="w-5 h-5" />
@@ -100,8 +112,8 @@ export default function Saved() {
           </div>
         ) : (
           <div className="text-center py-12">
-            <div className="text-4xl mb-4">📚</div>
-            <p className="text-foreground/70 text-lg">
+            <div className="text-6xl mb-6">📚</div>
+            <p className="text-foreground/70 text-xl font-semibold">
               {t("saved.noSaved")}
             </p>
             <p className="text-foreground/50 text-sm mt-2">
@@ -109,7 +121,7 @@ export default function Saved() {
             </p>
             <button
               onClick={() => navigate("/")}
-              className="mt-6 px-6 py-2 bg-primary text-primary-foreground rounded-lg font-medium hover:bg-primary/90 transition"
+              className="mt-8 px-6 py-3 bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 text-white rounded-xl font-bold transition-all duration-300 shadow-lg hover:shadow-xl"
             >
               {t("saved.startExploring")}
             </button>
