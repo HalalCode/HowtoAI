@@ -15,6 +15,7 @@ import {
 import { SearchResponse, Video, Article } from "@shared/api";
 import { useI18n } from "@/i18n/context";
 import { Language } from "@/i18n/translations";
+import { saveTutorial, isTutorialSaved, deleteTutorial, getTutorialByQuery } from "@/lib/saved-tutorials";
 
 export default function Results() {
   const [searchParams] = useSearchParams();
