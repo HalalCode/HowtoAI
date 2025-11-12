@@ -249,18 +249,31 @@ export default function Results() {
               <div className="absolute -inset-1 bg-gradient-to-r from-blue-500 via-purple-500 to-pink-500 rounded-3xl opacity-0 group-hover:opacity-30 blur-2xl transition-all duration-300 group-hover:blur-3xl"></div>
               <div className="relative bg-gradient-to-br from-white/20 to-white/10 dark:from-slate-900/70 dark:to-slate-900/50 backdrop-blur-xl border border-white/30 dark:border-white/20 rounded-3xl p-8 md:p-12 shadow-2xl hover:shadow-3xl transition-all duration-300">
                 {/* Header */}
-                <div className="flex items-start gap-4 mb-8">
-                  <div className="p-3 bg-gradient-to-br from-blue-500/20 to-purple-500/20 rounded-xl">
-                    <Zap className="w-7 h-7 text-blue-500" />
+                <div className="flex items-start justify-between gap-4 mb-8">
+                  <div className="flex items-start gap-4 flex-1">
+                    <div className="p-3 bg-gradient-to-br from-blue-500/20 to-purple-500/20 rounded-xl flex-shrink-0">
+                      <Zap className="w-7 h-7 text-blue-500" />
+                    </div>
+                    <div>
+                      <h2 className="text-4xl md:text-5xl font-black bg-clip-text text-transparent bg-gradient-to-r from-blue-600 to-purple-600 dark:from-blue-400 dark:to-purple-400 mb-2">
+                        {t("results.aiSummary")}
+                      </h2>
+                      <p className="text-sm text-foreground/70">
+                        {t("results.generatedUsing")}
+                      </p>
+                    </div>
                   </div>
-                  <div>
-                    <h2 className="text-4xl md:text-5xl font-black bg-clip-text text-transparent bg-gradient-to-r from-blue-600 to-purple-600 dark:from-blue-400 dark:to-purple-400 mb-2">
-                      {t("results.aiSummary")}
-                    </h2>
-                    <p className="text-sm text-foreground/70">
-                      {t("results.generatedUsing")}
-                    </p>
-                  </div>
+                  {/* Toggle Step View Button */}
+                  <button
+                    onClick={() => setUseStepView(!useStepView)}
+                    className={`px-4 py-2 rounded-lg font-bold text-sm transition-all duration-300 flex-shrink-0 ${
+                      useStepView
+                        ? "bg-gradient-to-r from-blue-500 to-purple-500 text-white shadow-lg shadow-purple-500/30 hover:shadow-xl"
+                        : "bg-white/20 dark:bg-white/10 border border-white/20 dark:border-white/10 text-foreground hover:border-blue-500/50 hover:bg-white/30"
+                    }`}
+                  >
+                    {useStepView ? "Step View" : "Full Text"}
+                  </button>
                 </div>
 
                 {/* Step Card */}
