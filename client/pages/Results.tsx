@@ -171,13 +171,28 @@ export default function Results() {
         ) : error ? (
           <div className="bg-destructive/10 border border-destructive/30 rounded-lg p-6 text-center space-y-4">
             <AlertCircle className="w-8 h-8 text-destructive mx-auto" />
-            <p className="text-foreground font-medium">Error: {error}</p>
-            <button
-              onClick={() => fetchResults()}
-              className="px-4 py-2 bg-primary text-primary-foreground rounded-lg font-medium hover:bg-primary/90 transition"
-            >
-              Try Again
-            </button>
+            <div>
+              <p className="text-foreground font-medium mb-2">
+                {error.includes("Invalid") ? "Invalid Search Query" : "Search Error"}
+              </p>
+              <p className="text-foreground/70 text-sm">{error}</p>
+            </div>
+            <div className="flex gap-3 justify-center">
+              <button
+                onClick={() => navigate("/")}
+                className="px-6 py-2 bg-primary text-primary-foreground rounded-lg font-medium hover:bg-primary/90 transition"
+              >
+                Try Another Search
+              </button>
+              {data && (
+                <button
+                  onClick={() => fetchResults()}
+                  className="px-6 py-2 bg-card border border-input text-foreground rounded-lg font-medium hover:border-primary transition"
+                >
+                  Retry
+                </button>
+              )}
+            </div>
           </div>
         ) : data ? (
           <div className="space-y-8 animate-fadeIn">
