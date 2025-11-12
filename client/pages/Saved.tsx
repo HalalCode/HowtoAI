@@ -72,29 +72,46 @@ export default function Saved() {
       </header>
 
       <main className="max-w-4xl mx-auto px-4 py-8">
-        {MOCK_SAVED.length > 0 ? (
+        {savedItems.length > 0 ? (
           <div className="grid gap-4 animate-fadeIn">
-            {MOCK_SAVED.map((item) => (
+            {savedItems.map((item) => (
               <div
                 key={item.id}
                 className="bg-white/10 dark:bg-slate-800/50 backdrop-blur-md border border-white/20 dark:border-white/10 hover:border-purple-500/50 hover:bg-white/20 dark:hover:bg-slate-700/70 rounded-xl overflow-hidden transition-all duration-300 cursor-pointer group shadow-lg hover:shadow-2xl hover:shadow-purple-500/20"
               >
                 <div className="flex gap-4 p-4">
-                  <div className="w-20 h-20 bg-gradient-to-br from-blue-500/20 to-purple-500/20 rounded-lg flex items-center justify-center text-3xl flex-shrink-0 group-hover:from-blue-500/30 group-hover:to-purple-500/30 transition">
-                    {item.thumbnail}
+                  <div
+                    className="w-20 h-20 bg-gradient-to-br from-blue-500/20 to-purple-500/20 rounded-lg flex items-center justify-center text-3xl flex-shrink-0 group-hover:from-blue-500/30 group-hover:to-purple-500/30 transition cursor-pointer"
+                    onClick={() => navigate(`/results?q=${encodeURIComponent(item.query)}`)}
+                  >
+                    {getEmoji(item.title)}
                   </div>
-                  <div className="flex-1">
+                  <div
+                    className="flex-1 cursor-pointer"
+                    onClick={() => navigate(`/results?q=${encodeURIComponent(item.query)}`)}
+                  >
                     <h3 className="font-bold text-foreground group-hover:text-transparent group-hover:bg-clip-text group-hover:bg-gradient-to-r group-hover:from-blue-600 group-hover:to-purple-600 transition">
                       {item.title}
                     </h3>
-                    <div className="flex items-center gap-4 mt-2 text-sm text-foreground/60">
+                    <div className="flex items-center gap-4 mt-2 text-sm text-foreground/60 flex-wrap">
                       <span className="flex items-center gap-1">
                         <Calendar className="w-4 h-4" />
-                        {t("saved.savedDate")} {item.dateSaved}
+                        {item.dateSaved}
                       </span>
+                      {item.timeEstimate && (
+                        <span className="flex items-center gap-1">
+                          ⏱ {item.timeEstimate}
+                        </span>
+                      )}
+                      {item.difficulty && (
+                        <span className="flex items-center gap-1">
+                          💪 {item.difficulty}
+                        </span>
+                      )}
                     </div>
                   </div>
                   <button
+                    onClick={() => handleDelete(item.id)}
                     className="p-2 hover:bg-red-500/20 hover:text-red-500 rounded-lg transition-all duration-300 flex-shrink-0 font-bold"
                     title="Delete"
                   >
