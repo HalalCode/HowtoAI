@@ -94,6 +94,10 @@ export default function Results() {
       }
 
       setData(responseData);
+      // Parse steps from the summary
+      const parsedSteps = parseStepsFromSummary(responseData.summary);
+      setSteps(parsedSteps);
+      setCurrentStepIndex(0);
     } catch (err) {
       setError(
         err instanceof Error
@@ -104,6 +108,14 @@ export default function Results() {
     } finally {
       setIsLoading(false);
     }
+  };
+
+  const handlePreviousStep = () => {
+    setCurrentStepIndex(Math.max(0, currentStepIndex - 1));
+  };
+
+  const handleNextStep = () => {
+    setCurrentStepIndex(Math.min(steps.length - 1, currentStepIndex + 1));
   };
 
   const handleShare = () => {
