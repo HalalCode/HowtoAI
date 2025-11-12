@@ -33,6 +33,12 @@ export default function Results() {
   const [currentStepIndex, setCurrentStepIndex] = useState(0);
   const [steps, setSteps] = useState<string[]>([]);
   const [useStepView, setUseStepView] = useState(true);
+  const [showCelebration, setShowCelebration] = useState(false);
+  const [metadata, setMetadata] = useState<{
+    tools: string[];
+    timeEstimate: string;
+    difficulty: string;
+  }>({ tools: [], timeEstimate: "", difficulty: "" });
 
   const [data, setData] = useState<SearchResponse | null>(null);
 
