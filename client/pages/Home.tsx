@@ -120,7 +120,7 @@ export default function Home() {
         <div className="text-center space-y-4">
           <div className="flex justify-center">
             <div className="text-6xl md:text-7xl animate-bounce" style={{animationDelay: '0s'}}>
-              🧠
+              ����
             </div>
           </div>
           <h1 className="text-4xl md:text-5xl font-bold text-foreground">
@@ -163,7 +163,7 @@ export default function Home() {
           {/* Validation Feedback */}
           {query && !isValidQuery(query) && (
             <p className="text-xs text-destructive/80 text-center">
-              Please enter a meaningful "How to..." question (at least 3 characters and 2 words)
+              {t("home.invalidQuery")}
             </p>
           )}
 
@@ -171,11 +171,11 @@ export default function Home() {
           <button
             onClick={() => handleSearch()}
             disabled={!isValidQuery(query)}
-            title={!isValidQuery(query) ? "Please enter a valid 'How to...' question (at least 3 characters, 2+ words)" : ""}
+            title={!isValidQuery(query) ? t("home.invalidQuery") : ""}
             className="w-full bg-gradient-to-r from-primary to-secondary hover:shadow-lg disabled:opacity-50 disabled:cursor-not-allowed text-primary-foreground font-semibold py-4 px-6 rounded-xl transition-all duration-200 transform hover:scale-[1.02] active:scale-95 flex items-center justify-center gap-2"
           >
             <Search className="w-5 h-5" />
-            Search
+            {t("home.searchButton")}
           </button>
         </div>
 
