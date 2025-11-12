@@ -47,10 +47,9 @@ export default function Results() {
   const extractMetadata = (summary: string) => {
     const tools: Set<string> = new Set();
 
-    // Find the Tools/Equipment section and extract all lines until next section
+    // Find the Tools/Equipment section and extract all lines until "Ingredients:" or next section
     const toolsLines = summary.split('\n');
     let inToolsSection = false;
-    let toolsEndLine = -1;
 
     for (let i = 0; i < toolsLines.length; i++) {
       const line = toolsLines[i];
@@ -64,7 +63,7 @@ export default function Results() {
           const items = inlineMatch[1].split(/[,;]/);
           items.forEach(item => {
             const cleaned = item.trim();
-            if (cleaned && cleaned.length > 1) {
+            if (cleaned && cleaned.length > 1 && !cleaned.match(/ingredients/i)) {
               tools.add(cleaned);
             }
           });
@@ -72,25 +71,24 @@ export default function Results() {
         continue;
       }
 
-      // End of tools section (next section starts)
-      if (inToolsSection && /^(Difficulty|Time|Step \d+:|Instructions|How to)/i.test(line.trim())) {
-        toolsEndLine = i;
+      // End of tools section (Ingredients or next major section starts)
+      if (inToolsSection && /^(Ingredients|Difficulty|Time|Step \d+:|Instructions|How to)/i.test(line.trim())) {
         inToolsSection = false;
         break;
       }
 
-      // Extract tools from list items
+      // Extract tools from list items (only in tools section, not ingredients)
       if (inToolsSection && line.trim()) {
         const listMatch = line.match(/^[-•*\d.)\s]*/);
         if (listMatch) {
           const cleaned = line.replace(/^[-•*\d.)\s]+/, '').trim();
-          if (cleaned && cleaned.length > 1 && !cleaned.match(/^(Difficulty|Time|Step)/i)) {
+          if (cleaned && cleaned.length > 1 && !cleaned.match(/^(Difficulty|Time|Step|Ingredients)/i)) {
             tools.add(cleaned);
           }
         } else if (line.trim().length > 1) {
           // Add non-list lines from tools section too
           const cleaned = line.trim();
-          if (!cleaned.match(/^(Difficulty|Time|Step|Instructions)/i)) {
+          if (!cleaned.match(/^(Difficulty|Time|Step|Instructions|Ingredients)/i)) {
             tools.add(cleaned);
           }
         }
