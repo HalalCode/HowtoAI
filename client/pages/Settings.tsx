@@ -17,18 +17,27 @@ const languageNames: Record<string, string> = {
 export default function Settings() {
   const navigate = useNavigate();
   const { language, setLanguage: setAppLanguage, t } = useI18n();
-  const [darkMode, setDarkMode] = useState(false);
+  const [darkMode, setDarkMode] = useState(() => {
+    const stored = localStorage.getItem("darkMode");
+    if (stored !== null) return stored === "true";
+    return true; // Default to dark mode
+  });
   const [showVideosOnly, setShowVideosOnly] = useState(false);
   const [showArticlesOnly, setShowArticlesOnly] = useState(false);
   const [showLanguageSaved, setShowLanguageSaved] = useState(false);
 
-  const handleDarkModeToggle = () => {
-    setDarkMode(!darkMode);
-    if (!darkMode) {
+  useEffect(() => {
+    // Apply dark mode on mount and when it changes
+    if (darkMode) {
       document.documentElement.classList.add("dark");
     } else {
       document.documentElement.classList.remove("dark");
     }
+    localStorage.setItem("darkMode", darkMode.toString());
+  }, [darkMode]);
+
+  const handleDarkModeToggle = () => {
+    setDarkMode(!darkMode);
   };
 
   const handleLanguageChange = (newLanguage: string) => {
