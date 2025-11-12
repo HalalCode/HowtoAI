@@ -46,31 +46,49 @@ export default function Results() {
   // Extract metadata from summary
   const extractMetadata = (summary: string) => {
     const tools: string[] = [];
-    const toolPattern = /(?:Tools?:?\s*|Required:?\s*|You'll?\s+need:?\s*)(.*?)(?:\n|Difficulty|Time|Step \d+:|$)/gi;
-    const toolMatch = summary.match(toolPattern);
+
+    // Try to extract tools from various patterns
+    // Pattern 1: "Tools Needed: item1, item2"
+    let toolMatch = summary.match(/Tools?\s*(?:Needed)?:?\s*([^\n]+?)(?:\n|Difficulty|Time|Step \d+:|$)/i);
     if (toolMatch) {
-      const toolText = toolMatch[0];
-      const toolItems = toolText.split(/[,•\n-]/).filter(item => item.trim().length > 0);
+      const toolText = toolMatch[1];
+      const toolItems = toolText.split(/[,;•\n-]/);
       toolItems.forEach(item => {
-        const cleaned = item.replace(/Tools?:?|Required:?|You'll?\s+need:?/gi, '').trim();
-        if (cleaned && !cleaned.includes('Difficulty') && !cleaned.includes('Time')) {
+        const cleaned = item.trim();
+        if (cleaned && cleaned.length > 1 && !cleaned.match(/^(Difficulty|Time|Required)/i)) {
           tools.push(cleaned);
         }
       });
     }
 
+    // Pattern 2: Look in the content for "- item" lists
+    if (tools.length === 0) {
+      const contentMatch = summary.match(/(?:Tools?|Required|You'll?\s+need)[\s\S]*?\n((?:\s*[-•]\s*.+\n?)*)/i);
+      if (contentMatch && contentMatch[1]) {
+        const items = contentMatch[1].split('\n');
+        items.forEach(item => {
+          const cleaned = item.replace(/^[-•]\s*/, '').trim();
+          if (cleaned && cleaned.length > 1) {
+            tools.push(cleaned);
+          }
+        });
+      }
+    }
+
     let timeEstimate = "";
-    const timePattern = /Time:?\s*(\d+\s*(?:minutes?|hours?|mins?|hrs?))/i;
-    const timeMatch = summary.match(timePattern);
-    if (timeMatch) {
-      timeEstimate = timeMatch[1];
+    const timePattern = /Time:?\s*(\d+[\s\-]*(?:minutes?|hours?|mins?|hrs?|min|hr))/i;
+    const timeMatchRes = summary.match(timePattern);
+    if (timeMatchRes) {
+      timeEstimate = timeMatchRes[1];
     }
 
     let difficulty = "";
     const difficultyPattern = /Difficulty:?\s*([\w\s]+?)(?:\n|Step \d+:|$)/i;
     const difficultyMatch = summary.match(difficultyPattern);
     if (difficultyMatch) {
-      difficulty = difficultyMatch[1].trim();
+      const rawDifficulty = difficultyMatch[1].trim();
+      // Only take the first word or two (e.g., "Beginner" or "Intermediate Level")
+      difficulty = rawDifficulty.split(/[,\n]/)[0].trim();
     }
 
     return { tools, timeEstimate, difficulty };
