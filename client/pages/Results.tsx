@@ -161,9 +161,9 @@ export default function Results() {
           <div className="space-y-6">
             <div className="text-center py-12 space-y-4">
               <div className="flex justify-center">
-                <div className="text-4xl animate-bounce">✨</div>
+                <div className="text-4xl animate-bounce" style={{animationDuration: '2s'}}>✨</div>
               </div>
-              <p className="text-lg text-foreground/70">
+              <p className="text-lg text-foreground/70 font-medium">
                 {t("results.finding")}
               </p>
               <p className="text-sm text-foreground/50">
@@ -175,31 +175,31 @@ export default function Results() {
               {[1, 2, 3].map((i) => (
                 <div
                   key={i}
-                  className="bg-muted rounded-lg h-24 shimmer-skeleton"
+                  className="bg-white/10 dark:bg-slate-800/50 rounded-lg h-24 shimmer-skeleton"
                 ></div>
               ))}
             </div>
           </div>
         ) : error ? (
-          <div className="bg-destructive/10 border border-destructive/30 rounded-lg p-6 text-center space-y-4">
-            <AlertCircle className="w-8 h-8 text-destructive mx-auto" />
+          <div className="bg-red-500/10 border border-red-500/30 rounded-2xl p-6 text-center space-y-4 backdrop-blur-md">
+            <AlertCircle className="w-8 h-8 text-red-500 mx-auto" />
             <div>
-              <p className="text-foreground font-medium mb-2">
+              <p className="text-foreground font-bold mb-2 text-lg">
                 {error.includes("Invalid") ? t("results.errorTitle") : t("results.searchError")}
               </p>
               <p className="text-foreground/70 text-sm">{error}</p>
             </div>
-            <div className="flex gap-3 justify-center">
+            <div className="flex gap-3 justify-center flex-wrap">
               <button
                 onClick={() => navigate("/")}
-                className="px-6 py-2 bg-primary text-primary-foreground rounded-lg font-medium hover:bg-primary/90 transition"
+                className="px-6 py-2 bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 text-white rounded-lg font-bold transition-all duration-300 shadow-lg hover:shadow-xl"
               >
                 {t("results.tryAnotherSearch")}
               </button>
               {data && (
                 <button
                   onClick={() => fetchResults()}
-                  className="px-6 py-2 bg-card border border-input text-foreground rounded-lg font-medium hover:border-primary transition"
+                  className="px-6 py-2 bg-white/20 dark:bg-white/10 border border-white/20 dark:border-white/10 text-foreground rounded-lg font-bold hover:border-purple-500/50 transition-all duration-300"
                 >
                   {t("results.retry")}
                 </button>
