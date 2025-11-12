@@ -2,24 +2,14 @@ import { useState, useRef, useEffect } from "react";
 import { useNavigate, Link } from "react-router-dom";
 import { Mic, Search } from "lucide-react";
 import { useI18n } from "@/i18n/context";
-
-const trendingSearchesEnglish = [
-  "How to tie a tie",
-  "How to cook rice",
-  "How to change a tire",
-  "How to fix a leaky faucet",
-  "How to bake a cake",
-  "How to learn guitar",
-  "How to start a garden",
-  "How to meditate",
-];
+import { translations } from "@/i18n/translations";
 
 export default function Home() {
   const [query, setQuery] = useState("");
   const [isListening, setIsListening] = useState(false);
   const recognitionRef = useRef<any>(null);
   const navigate = useNavigate();
-  const { t } = useI18n();
+  const { t, language } = useI18n();
 
   useEffect(() => {
     // Initialize speech recognition if available
@@ -185,7 +175,7 @@ export default function Home() {
             {t("home.trendingSearches")}
           </h3>
           <div className="flex flex-wrap gap-2">
-            {trendingSearchesEnglish.map((search, index) => (
+            {(translations[language]?.home?.trendingList || []).map((search, index) => (
               <button
                 key={index}
                 onClick={() => handleTrendingClick(search)}
