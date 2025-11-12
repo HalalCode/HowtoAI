@@ -340,7 +340,7 @@ export default function Results() {
             <div className="bg-card border border-input rounded-xl p-6 space-y-4">
               <h3 className="font-semibold text-foreground flex items-center gap-2">
                 <Search className="w-5 h-5 text-primary" />
-                Ask a Follow-up Question
+                {t("results.followUpQuestion")}
               </h3>
               <div className="flex gap-2">
                 <input
@@ -348,7 +348,7 @@ export default function Results() {
                   value={followUpQuery}
                   onChange={(e) => setFollowUpQuery(e.target.value)}
                   onKeyPress={(e) => e.key === "Enter" && handleFollowUp()}
-                  placeholder="Ask a follow-up question…"
+                  placeholder={t("results.followUpPlaceholder")}
                   className="flex-1 bg-background border border-input rounded-lg px-4 py-2 outline-none focus:border-primary transition"
                 />
                 <button
@@ -356,7 +356,7 @@ export default function Results() {
                   disabled={!followUpQuery.trim() || isFollowUpLoading}
                   className="bg-primary hover:bg-primary/90 disabled:opacity-50 disabled:cursor-not-allowed text-primary-foreground font-medium px-6 py-2 rounded-lg transition"
                 >
-                  {isFollowUpLoading ? "…" : "Ask"}
+                  {isFollowUpLoading ? t("results.askingButton") : t("results.askButton")}
                 </button>
               </div>
               {followUpAnswer && (
