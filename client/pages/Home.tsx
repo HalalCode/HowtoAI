@@ -176,22 +176,19 @@ export default function Home() {
             )}
 
             {/* Search Button */}
-            <button
-              onClick={() => handleSearch()}
-              disabled={!isValidQuery(query)}
-              title={!isValidQuery(query) ? t("home.invalidQuery") : ""}
-              className="w-full relative group/btn overflow-hidden"
-            >
+            <div className="relative group/btn overflow-hidden rounded-2xl">
               <div className="absolute inset-0 bg-gradient-to-r from-blue-600 via-purple-600 to-pink-600 rounded-2xl opacity-100 group-hover/btn:opacity-90 transition-opacity duration-300"></div>
               <div className="absolute inset-0 bg-gradient-to-r from-blue-500 via-purple-500 to-pink-500 rounded-2xl opacity-0 group-hover/btn:opacity-100 blur-lg transition-opacity duration-300"></div>
               <button
+                onClick={() => handleSearch()}
                 disabled={!isValidQuery(query)}
+                title={!isValidQuery(query) ? t("home.invalidQuery") : ""}
                 className="relative w-full bg-gradient-to-r from-blue-600 via-purple-600 to-pink-600 hover:from-blue-700 hover:via-purple-700 hover:to-pink-700 disabled:from-slate-500 disabled:via-slate-500 disabled:to-slate-500 disabled:opacity-40 disabled:cursor-not-allowed text-white font-bold py-4 px-8 rounded-2xl transition-all duration-300 transform hover:scale-[1.02] active:scale-95 flex items-center justify-center gap-2 shadow-2xl hover:shadow-3xl disabled:shadow-none"
               >
                 <Search className="w-5 h-5" />
                 {t("home.searchButton")}
               </button>
-            </button>
+            </div>
           </div>
 
           {/* Trending Searches */}
