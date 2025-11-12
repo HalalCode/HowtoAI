@@ -140,7 +140,7 @@ export default function Results() {
           </button>
           <div className="flex-1">
             <h1 className="text-lg font-semibold text-foreground">
-              Results for: <span className="text-primary">How to {query}</span>
+              {t("results.resultsFor")} <span className="text-primary">{query}</span>
             </h1>
           </div>
         </div>
