@@ -47,51 +47,55 @@ export default function Results() {
   const extractMetadata = (summary: string) => {
     const tools: Set<string> = new Set();
 
-    // Pattern 1: "Tools Needed: item1, item2" or "Tools: item1, item2"
-    let toolMatch = summary.match(/Tools?\s*(?:Needed)?:?\s*([^\n]+?)(?:\n|Difficulty|Time|Step \d+:|$)/i);
-    if (toolMatch) {
-      const toolText = toolMatch[1];
-      const toolItems = toolText.split(/[,;•]/);
-      toolItems.forEach(item => {
-        const cleaned = item.trim();
-        if (cleaned && cleaned.length > 1 && !cleaned.match(/^(Difficulty|Time|Required|and)/i)) {
-          tools.add(cleaned);
-        }
-      });
-    }
+    // Find the Tools/Equipment section and extract all lines until next section
+    const toolsLines = summary.split('\n');
+    let inToolsSection = false;
+    let toolsEndLine = -1;
 
-    // Pattern 2: Look for bullet/dash lists under "Tools" section
-    const toolsSection = summary.match(/(?:Tools?|Equipment|Required|You'll?\s+need)\s*:?[\s\S]*?\n((?:\s*[-•*]\s*.+\n?)+)/i);
-    if (toolsSection && toolsSection[1]) {
-      const items = toolsSection[1].split('\n');
-      items.forEach(item => {
-        const cleaned = item.replace(/^[-•*]\s*/, '').trim();
-        if (cleaned && cleaned.length > 1 && !cleaned.match(/^(Difficulty|Time|Step)/i)) {
-          tools.add(cleaned);
-        }
-      });
-    }
+    for (let i = 0; i < toolsLines.length; i++) {
+      const line = toolsLines[i];
 
-    // Pattern 3: Look for tools mentioned throughout the content (common patterns)
-    // Find mentions like "a [adjective] [noun]" or just tool names
-    const toolMentions = summary.match(/(?:using|with|need|require|have|use|get)[\s\w]+(a|an)?\s+([a-z][a-z\s]+?)(?:[,.!?\n]|and|or|\d|Step)/gi);
-    if (toolMentions) {
-      toolMentions.forEach(mention => {
-        const cleaned = mention
-          .replace(/^(?:using|with|need|require|have|use|get)\s+(?:a|an)?\s+/i, '')
-          .replace(/[\s]*(?:and|or|\d|Step).*$/i, '')
-          .trim();
-        if (cleaned && cleaned.length > 2 && !cleaned.match(/^(Difficulty|Time|water|ingredients?|steps)/i)) {
-          // Only add if it looks like a tool (contains tool-like words)
-          if (cleaned.match(/(?:pot|pan|knife|spoon|fork|bowl|cup|measuring|stove|cooker|whisk|spatula|grater|peeler|board|pan|tray|baking|sheet|wok|strainer|sieve|mixer|blender|processor|oven|grill|broiler|iron|cast|nonstick|ceramic|glass|cloth|cloth|mat|rack|holder|stand|scale|thermometer|timer)/i)) {
+      // Start of tools section
+      if (/^(Tools|Equipment|Required|You.{0,10}need)/i.test(line.trim())) {
+        inToolsSection = true;
+        // Extract inline tools from this line if present
+        const inlineMatch = line.match(/:\s*(.+)$/);
+        if (inlineMatch) {
+          const items = inlineMatch[1].split(/[,;]/);
+          items.forEach(item => {
+            const cleaned = item.trim();
+            if (cleaned && cleaned.length > 1) {
+              tools.add(cleaned);
+            }
+          });
+        }
+        continue;
+      }
+
+      // End of tools section (next section starts)
+      if (inToolsSection && /^(Difficulty|Time|Step \d+:|Instructions|How to)/i.test(line.trim())) {
+        toolsEndLine = i;
+        inToolsSection = false;
+        break;
+      }
+
+      // Extract tools from list items
+      if (inToolsSection && line.trim()) {
+        const listMatch = line.match(/^[-•*\d.)\s]*/);
+        if (listMatch) {
+          const cleaned = line.replace(/^[-•*\d.)\s]+/, '').trim();
+          if (cleaned && cleaned.length > 1 && !cleaned.match(/^(Difficulty|Time|Step)/i)) {
+            tools.add(cleaned);
+          }
+        } else if (line.trim().length > 1) {
+          // Add non-list lines from tools section too
+          const cleaned = line.trim();
+          if (!cleaned.match(/^(Difficulty|Time|Step|Instructions)/i)) {
             tools.add(cleaned);
           }
         }
-      });
+      }
     }
-
-    // Convert Set to Array and remove duplicates
-    const uniqueTools = Array.from(tools);
 
     let timeEstimate = "";
     const timePattern = /Time:?\s*(\d+[\s\-]*(?:minutes?|hours?|mins?|hrs?|min|hr))/i;
@@ -109,7 +113,7 @@ export default function Results() {
       difficulty = rawDifficulty.split(/[,\n]/)[0].trim();
     }
 
-    return { tools: uniqueTools, timeEstimate, difficulty };
+    return { tools: Array.from(tools), timeEstimate, difficulty };
   };
 
   // Parse summary into steps
