@@ -1,3 +1,4 @@
+import { useEffect } from "react";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { I18nProvider } from "./i18n/context";
 import Home from "./pages/Home";
@@ -7,6 +8,18 @@ import Settings from "./pages/Settings";
 import NotFound from "./pages/NotFound";
 
 export default function App() {
+  useEffect(() => {
+    // Initialize dark mode on app startup
+    const stored = localStorage.getItem("darkMode");
+    const isDarkMode = stored !== null ? stored === "true" : true; // Default to dark
+
+    if (isDarkMode) {
+      document.documentElement.classList.add("dark");
+    } else {
+      document.documentElement.classList.remove("dark");
+    }
+  }, []);
+
   return (
     <I18nProvider>
       <BrowserRouter>
