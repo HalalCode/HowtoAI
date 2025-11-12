@@ -175,7 +175,7 @@ export default function Results() {
             <AlertCircle className="w-8 h-8 text-destructive mx-auto" />
             <div>
               <p className="text-foreground font-medium mb-2">
-                {error.includes("Invalid") ? "Invalid Search Query" : "Search Error"}
+                {error.includes("Invalid") ? t("results.errorTitle") : t("results.searchError")}
               </p>
               <p className="text-foreground/70 text-sm">{error}</p>
             </div>
@@ -184,14 +184,14 @@ export default function Results() {
                 onClick={() => navigate("/")}
                 className="px-6 py-2 bg-primary text-primary-foreground rounded-lg font-medium hover:bg-primary/90 transition"
               >
-                Try Another Search
+                {t("results.tryAnotherSearch")}
               </button>
               {data && (
                 <button
                   onClick={() => fetchResults()}
                   className="px-6 py-2 bg-card border border-input text-foreground rounded-lg font-medium hover:border-primary transition"
                 >
-                  Retry
+                  {t("results.retry")}
                 </button>
               )}
             </div>
