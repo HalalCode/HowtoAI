@@ -161,7 +161,8 @@ export default function Home() {
           {/* Search Button */}
           <button
             onClick={() => handleSearch()}
-            disabled={!query.trim()}
+            disabled={!isValidQuery(query)}
+            title={!isValidQuery(query) ? "Please enter a valid 'How to...' question (at least 3 characters, 2+ words)" : ""}
             className="w-full bg-gradient-to-r from-primary to-secondary hover:shadow-lg disabled:opacity-50 disabled:cursor-not-allowed text-primary-foreground font-semibold py-4 px-6 rounded-xl transition-all duration-200 transform hover:scale-[1.02] active:scale-95 flex items-center justify-center gap-2"
           >
             <Search className="w-5 h-5" />
