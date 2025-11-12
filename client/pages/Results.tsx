@@ -139,6 +139,14 @@ export default function Results() {
       const parsedSteps = parseStepsFromSummary(responseData.summary);
       setSteps(parsedSteps);
       setCurrentStepIndex(0);
+
+      // Extract metadata
+      const meta = extractMetadata(responseData.summary);
+      setMetadata(meta);
+
+      // Check if already saved
+      const saved = getTutorialByQuery(query);
+      setIsSaved(!!saved);
     } catch (err) {
       setError(
         err instanceof Error
