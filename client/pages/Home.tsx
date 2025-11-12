@@ -19,6 +19,7 @@ export default function Home() {
   const [isListening, setIsListening] = useState(false);
   const recognitionRef = useRef<any>(null);
   const navigate = useNavigate();
+  const { t } = useI18n();
 
   useEffect(() => {
     // Initialize speech recognition if available
