@@ -143,7 +143,7 @@ export default function Home() {
                 value={query}
                 onChange={(e) => setQuery(e.target.value)}
                 onKeyPress={handleKeyPress}
-                placeholder="Type or say 'How to…'"
+                placeholder={t("home.searchPlaceholder")}
                 className="flex-1 bg-transparent outline-none text-foreground placeholder:text-foreground/40 text-base"
               />
               <button
