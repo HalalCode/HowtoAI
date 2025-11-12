@@ -472,16 +472,13 @@ export default function Results() {
                           </div>
                         )}
                         {metadata.tools.length > 0 && (
-                          <div className="bg-gradient-to-br from-blue-500/10 to-cyan-500/10 border border-blue-500/20 rounded-xl p-4">
+                          <div className="bg-gradient-to-br from-blue-500/10 to-cyan-500/10 border border-blue-500/20 rounded-xl p-4 md:col-span-2">
                             <div className="text-2xl mb-2">🔧</div>
-                            <p className="text-sm text-foreground/60 mb-1">Tools Needed</p>
-                            <div className="space-y-1">
-                              {metadata.tools.slice(0, 3).map((tool, idx) => (
+                            <p className="text-sm text-foreground/60 mb-3">Tools Needed</p>
+                            <div className="space-y-2">
+                              {metadata.tools.map((tool, idx) => (
                                 <p key={idx} className="text-sm font-medium text-foreground">• {tool}</p>
                               ))}
-                              {metadata.tools.length > 3 && (
-                                <p className="text-xs text-foreground/60 mt-2">+{metadata.tools.length - 3} more</p>
-                              )}
                             </div>
                           </div>
                         )}
