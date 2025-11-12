@@ -27,6 +27,10 @@ export default function Settings() {
   const [showLanguageSaved, setShowLanguageSaved] = useState(false);
 
   useEffect(() => {
+    // Ensure page is visible and document is properly initialized
+    document.documentElement.style.display = 'block';
+    document.body.style.display = 'block';
+
     // Apply dark mode on mount and when it changes
     if (darkMode) {
       document.documentElement.classList.add("dark");
@@ -36,14 +40,24 @@ export default function Settings() {
     localStorage.setItem("darkMode", darkMode.toString());
   }, [darkMode]);
 
+  useEffect(() => {
+    // Ensure page stays visible when language changes
+    document.documentElement.style.display = 'block';
+    document.body.style.display = 'block';
+  }, [language]);
+
   const handleDarkModeToggle = () => {
     setDarkMode(!darkMode);
   };
 
   const handleLanguageChange = (newLanguage: string) => {
-    setAppLanguage(newLanguage as Language);
-    setShowLanguageSaved(true);
-    setTimeout(() => setShowLanguageSaved(false), 2000);
+    try {
+      setAppLanguage(newLanguage as Language);
+      setShowLanguageSaved(true);
+      setTimeout(() => setShowLanguageSaved(false), 2000);
+    } catch (error) {
+      console.error("Error changing language:", error);
+    }
   };
 
   return (
