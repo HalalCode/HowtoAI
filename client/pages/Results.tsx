@@ -78,55 +78,22 @@ export default function Results() {
 
   // Parse summary into steps
   const parseStepsFromSummary = (summary: string): string[] => {
-    // Try multiple step patterns
-    // Pattern 1: "Step 1:", "Step 2:", etc.
+    // First, remove metadata headers (Difficulty, Time, Tools sections)
+    let cleanSummary = summary;
+
+    // Remove common metadata patterns at the beginning
+    cleanSummary = cleanSummary
+      .replace(/^[^0-9]*?(Title|How to|Difficulty Level:|Time Required:|Tools Needed:)[^\n]*\n?/gmi, '')
+      .trim();
+
+    // Try Pattern 1: "Step 1:", "Step 2:", etc.
     let stepPattern = /Step\s+\d+:\s*/gi;
     let parts = summary.split(stepPattern);
 
-    // If only one part (no "Step X:" format found), try numbered format
-    if (parts.length <= 1) {
-      // Pattern 2: "1.", "2.", "3.", etc. at the start of a line
-      stepPattern = /\n\s*\d+\.\s+/g;
-      const splitParts = summary.split(stepPattern);
-
-      // Filter and clean
-      const cleanedParts = splitParts
-        .map(part => part.trim())
-        .filter(part => part.length > 0);
-
-      if (cleanedParts.length > 1) {
-        return cleanedParts;
-      }
-
-      // Pattern 3: Multiple periods (.) that might indicate step breaks
-      // If we still don't have steps, split by newline-preceded numbers
-      if (summary.includes('\n')) {
-        const lines = summary.split('\n');
-        const stepLines: string[] = [];
-        let currentStep = '';
-
-        for (const line of lines) {
-          const trimmed = line.trim();
-          if (/^\d+\./.test(trimmed)) {
-            if (currentStep) {
-              stepLines.push(currentStep.trim());
-            }
-            currentStep = trimmed;
-          } else if (trimmed) {
-            currentStep += ' ' + trimmed;
-          }
-        }
-        if (currentStep) {
-          stepLines.push(currentStep.trim());
-        }
-
-        if (stepLines.length > 1) {
-          return stepLines;
-        }
-      }
-    } else {
-      // Clean up the parts from "Step X:" split
+    if (parts.length > 1) {
+      // Clean up and return
       const cleanedParts = parts
+        .slice(1) // Skip the first empty/header part
         .map(part => part.trim())
         .filter(part => part.length > 0);
 
@@ -135,8 +102,50 @@ export default function Results() {
       }
     }
 
+    // Try Pattern 2: Numbered items "1. ", "2. ", etc.
+    if (cleanSummary.includes('\n')) {
+      const lines = cleanSummary.split('\n');
+      const stepLines: string[] = [];
+      let currentStep = '';
+
+      for (const line of lines) {
+        const trimmed = line.trim();
+        // Match lines that start with a number followed by a period or closing paren
+        if (/^\d+[\.\)]\s+/.test(trimmed)) {
+          if (currentStep) {
+            stepLines.push(currentStep.trim());
+          }
+          // Remove the number and period/paren, keep just the content
+          currentStep = trimmed.replace(/^\d+[\.\)]\s+/, '');
+        } else if (trimmed && currentStep) {
+          // Continue building current step
+          currentStep += ' ' + trimmed;
+        } else if (trimmed && !currentStep) {
+          // Skip non-step content before first step
+          continue;
+        }
+      }
+      if (currentStep) {
+        stepLines.push(currentStep.trim());
+      }
+
+      if (stepLines.length > 1) {
+        return stepLines;
+      }
+    }
+
+    // Pattern 3: Try inline numbered format with periods
+    const inlinePattern = /\d+[\.\)]\s+[^0-9]*?(?=\d+[\.\)]|$)/g;
+    const matches = cleanSummary.match(inlinePattern);
+
+    if (matches && matches.length > 1) {
+      return matches
+        .map(m => m.replace(/^\d+[\.\)]\s+/, '').trim())
+        .filter(m => m.length > 0);
+    }
+
     // If no steps found, return the whole summary as one step
-    return [summary];
+    return [cleanSummary || summary];
   };
 
   const isValidQuery = (q: string): boolean => {
