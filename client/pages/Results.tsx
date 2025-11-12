@@ -31,6 +31,7 @@ export default function Results() {
   const [isFollowUpLoading, setIsFollowUpLoading] = useState(false);
   const [currentStepIndex, setCurrentStepIndex] = useState(0);
   const [steps, setSteps] = useState<string[]>([]);
+  const [useStepView, setUseStepView] = useState(true);
 
   const [data, setData] = useState<SearchResponse | null>(null);
 
