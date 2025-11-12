@@ -125,7 +125,7 @@ export default function Settings() {
 
           {/* Content Filters Section */}
           <div className="bg-card border border-input rounded-lg p-6 space-y-4">
-            <h3 className="font-semibold text-foreground">Content Filters</h3>
+            <h3 className="font-semibold text-foreground">{t("settings.contentFilters")}</h3>
             <div className="space-y-3">
               <label className="flex items-center gap-3 cursor-pointer">
                 <input
@@ -134,7 +134,7 @@ export default function Settings() {
                   onChange={(e) => setShowVideosOnly(e.target.checked)}
                   className="w-4 h-4 rounded cursor-pointer accent-primary"
                 />
-                <span className="text-foreground">Show only videos</span>
+                <span className="text-foreground">{t("settings.showVideosOnly")}</span>
               </label>
               <label className="flex items-center gap-3 cursor-pointer">
                 <input
@@ -143,7 +143,7 @@ export default function Settings() {
                   onChange={(e) => setShowArticlesOnly(e.target.checked)}
                   className="w-4 h-4 rounded cursor-pointer accent-primary"
                 />
-                <span className="text-foreground">Show only articles</span>
+                <span className="text-foreground">{t("settings.showArticlesOnly")}</span>
               </label>
             </div>
           </div>
