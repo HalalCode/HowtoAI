@@ -358,6 +358,45 @@ export default function Results() {
 
                 {useStepView ? (
                   <>
+                    {/* Celebration Animation */}
+                    {showCelebration && (
+                      <div className="fixed inset-0 flex items-center justify-center pointer-events-none z-50">
+                        <div className="text-center animate-bounce">
+                          <div className="text-8xl mb-4">✅</div>
+                          <p className="text-4xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-green-400 to-blue-600 animate-pulse">
+                            Tutorial Complete!
+                          </p>
+                        </div>
+                      </div>
+                    )}
+
+                    {/* Metadata Display */}
+                    {(metadata.tools.length > 0 || metadata.timeEstimate || metadata.difficulty) && (
+                      <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
+                        {metadata.timeEstimate && (
+                          <div className="bg-gradient-to-br from-orange-500/10 to-red-500/10 border border-orange-500/20 rounded-xl p-4">
+                            <div className="text-2xl mb-2">⏱</div>
+                            <p className="text-sm text-foreground/60 mb-1">Time Required</p>
+                            <p className="font-bold text-foreground">{metadata.timeEstimate}</p>
+                          </div>
+                        )}
+                        {metadata.difficulty && (
+                          <div className="bg-gradient-to-br from-purple-500/10 to-pink-500/10 border border-purple-500/20 rounded-xl p-4">
+                            <div className="text-2xl mb-2">💪</div>
+                            <p className="text-sm text-foreground/60 mb-1">Difficulty</p>
+                            <p className="font-bold text-foreground capitalize">{metadata.difficulty}</p>
+                          </div>
+                        )}
+                        {metadata.tools.length > 0 && (
+                          <div className="bg-gradient-to-br from-blue-500/10 to-cyan-500/10 border border-blue-500/20 rounded-xl p-4">
+                            <div className="text-2xl mb-2">🔧</div>
+                            <p className="text-sm text-foreground/60 mb-1">Tools Needed</p>
+                            <p className="font-bold text-foreground">{metadata.tools.length} items</p>
+                          </div>
+                        )}
+                      </div>
+                    )}
+
                     {/* Step Card */}
                     <div className="mb-6">
                       <div className="bg-gradient-to-br from-blue-500/10 to-purple-500/10 border border-blue-500/20 rounded-2xl p-8 md:p-10 min-h-64 md:min-h-72 flex flex-col justify-between">
