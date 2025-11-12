@@ -209,20 +209,23 @@ export default function Results() {
         ) : data ? (
           <div className="space-y-8 animate-fadeIn">
             {/* AI Summary Card */}
-            <div className="bg-gradient-to-br from-primary/10 to-secondary/10 border border-primary/20 rounded-xl p-6 md:p-8">
-              <div className="flex items-start gap-3 mb-4">
-                <Zap className="w-6 h-6 text-primary flex-shrink-0 mt-1" />
-                <div>
-                  <h2 className="text-2xl font-bold text-foreground">
-                    {t("results.aiSummary")}
-                  </h2>
-                  <p className="text-sm text-foreground/60">
-                    {t("results.generatedUsing")}
-                  </p>
+            <div className="relative group">
+              <div className="absolute -inset-0.5 bg-gradient-to-r from-blue-500 via-purple-500 to-pink-500 rounded-2xl opacity-0 group-hover:opacity-20 blur-xl transition-all duration-300 group-hover:blur-2xl"></div>
+              <div className="relative bg-white/10 dark:bg-slate-900/50 backdrop-blur-xl border border-white/20 dark:border-white/10 rounded-2xl p-6 md:p-8 shadow-2xl hover:shadow-3xl transition-all duration-300">
+                <div className="flex items-start gap-3 mb-4">
+                  <Zap className="w-6 h-6 text-blue-500 flex-shrink-0 mt-1" />
+                  <div>
+                    <h2 className="text-2xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-blue-600 to-purple-600 dark:from-blue-400 dark:to-purple-400">
+                      {t("results.aiSummary")}
+                    </h2>
+                    <p className="text-sm text-foreground/60">
+                      {t("results.generatedUsing")}
+                    </p>
+                  </div>
                 </div>
-              </div>
-              <div className="prose prose-sm max-w-none dark:prose-invert text-foreground whitespace-pre-wrap text-base leading-relaxed">
-                {data.summary}
+                <div className="prose prose-sm max-w-none dark:prose-invert text-foreground whitespace-pre-wrap text-base leading-relaxed">
+                  {data.summary}
+                </div>
               </div>
             </div>
 
