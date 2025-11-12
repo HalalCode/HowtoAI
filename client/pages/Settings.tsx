@@ -73,9 +73,9 @@ export default function Settings() {
                   <Sun className="w-5 h-5 text-primary" />
                 )}
                 <div>
-                  <h3 className="font-semibold text-foreground">Dark Mode</h3>
+                  <h3 className="font-semibold text-foreground">{t("settings.darkMode")}</h3>
                   <p className="text-sm text-foreground/60">
-                    Switch app theme
+                    {t("settings.switchTheme")}
                   </p>
                 </div>
               </div>
