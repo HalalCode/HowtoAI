@@ -272,9 +272,16 @@ export default function Results() {
             <ArrowLeft className="w-5 h-5 text-foreground" />
           </button>
           <div className="flex-1">
-            <h1 className="text-lg font-bold bg-clip-text text-transparent bg-gradient-to-r from-blue-600 to-purple-600 dark:from-blue-400 dark:to-purple-400">
-              {t("results.resultsFor")} <span className="text-foreground/90">{query}</span>
-            </h1>
+            <div className="flex items-center gap-3">
+              <h1 className="text-lg font-bold bg-clip-text text-transparent bg-gradient-to-r from-blue-600 to-purple-600 dark:from-blue-400 dark:to-purple-400">
+                {t("results.resultsFor")} <span className="text-foreground/90">{query}</span>
+              </h1>
+              {isSaved && (
+                <span className="inline-block px-3 py-1 bg-pink-500/20 border border-pink-500/50 rounded-full text-xs font-bold text-pink-500">
+                  ❤️ Saved
+                </span>
+              )}
+            </div>
           </div>
         </div>
       </header>
