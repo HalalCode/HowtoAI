@@ -53,14 +53,14 @@ export default function Saved() {
             </Link>
             <h1 className="text-2xl font-bold text-foreground">
               <Heart className="w-6 h-6 inline mr-2 text-secondary" />
-              My Tutorials
+              {t("saved.myTutorials")}
             </h1>
           </div>
           <Link
             to="/settings"
             className="text-sm font-medium text-foreground/70 hover:text-foreground transition"
           >
-            Settings
+            {t("settings.settings")}
           </Link>
         </div>
       </header>
