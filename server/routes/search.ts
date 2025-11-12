@@ -47,27 +47,39 @@ async function searchArticles(query: string): Promise<Article[]> {
   const apiKey = process.env.GOOGLE_SEARCH_API_KEY;
   const engineId = process.env.GOOGLE_SEARCH_ENGINE_ID;
 
-  if (!apiKey || !engineId)
-    throw new Error("Google Custom Search credentials not configured");
+  if (!apiKey || !engineId) {
+    console.warn("Google Custom Search credentials not configured");
+    return [];
+  }
 
-  const url = new URL("https://www.googleapis.com/customsearch/v1");
-  url.searchParams.append("q", query);
-  url.searchParams.append("cx", engineId);
-  url.searchParams.append("key", apiKey);
-  url.searchParams.append("num", "5");
+  try {
+    const url = new URL("https://www.googleapis.com/customsearch/v1");
+    url.searchParams.append("q", query);
+    url.searchParams.append("cx", engineId);
+    url.searchParams.append("key", apiKey);
+    url.searchParams.append("num", "5");
 
-  const response = await fetch(url.toString());
-  const data: any = await response.json();
+    const response = await fetch(url.toString());
+    const data: any = await response.json();
 
-  if (!data.items) return [];
+    if (!response.ok) {
+      console.warn(`Google Search API error: ${response.status} ${response.statusText}`, data?.error?.message);
+      return [];
+    }
 
-  return data.items.map((item: any, index: number) => ({
-    id: `article-${index}`,
-    title: item.title,
-    website: new URL(item.link).hostname || "Unknown",
-    snippet: item.snippet,
-    url: item.link,
-  }));
+    if (!data.items) return [];
+
+    return data.items.map((item: any, index: number) => ({
+      id: `article-${index}`,
+      title: item.title,
+      website: new URL(item.link).hostname || "Unknown",
+      snippet: item.snippet,
+      url: item.link,
+    }));
+  } catch (error) {
+    console.error("Google Search error:", error);
+    return [];
+  }
 }
 
 async function generateSummary(
