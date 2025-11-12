@@ -60,8 +60,20 @@ export default function Home() {
     }
   };
 
+  const isValidQuery = (q: string): boolean => {
+    const trimmed = q.trim();
+    // Must be at least 3 characters for a meaningful question
+    if (trimmed.length < 3) return false;
+    // Check if it contains at least 2 words (for a reasonable question)
+    const words = trimmed.split(/\s+/).filter(w => w.length > 1);
+    if (words.length < 2) return false;
+    // Prevent single letter or number gibberish
+    if (/^[a-zA-Z0-9]{1,2}$/.test(trimmed)) return false;
+    return true;
+  };
+
   const handleSearch = (searchQuery: string = query) => {
-    if (searchQuery.trim()) {
+    if (isValidQuery(searchQuery)) {
       navigate(`/results?q=${encodeURIComponent(searchQuery)}`);
     }
   };
