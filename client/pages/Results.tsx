@@ -623,7 +623,7 @@ export default function Results() {
             {/* Save & Share Buttons */}
             <div className="flex gap-3 sticky bottom-6 bg-white/10 dark:bg-slate-900/50 backdrop-blur-xl p-4 rounded-2xl border border-white/20 dark:border-white/10 justify-center shadow-2xl">
               <button
-                onClick={() => setIsSaved(!isSaved)}
+                onClick={handleSave}
                 className={`flex items-center gap-2 px-6 py-3 rounded-lg font-bold transition-all duration-300 ${
                   isSaved
                     ? "bg-gradient-to-r from-pink-600 to-red-600 hover:from-pink-700 hover:to-red-700 text-white shadow-lg hover:shadow-xl hover:shadow-pink-500/30"
